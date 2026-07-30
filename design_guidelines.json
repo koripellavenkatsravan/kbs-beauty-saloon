@@ -1,0 +1,96 @@
+{
+  "theme": "hybrid_luxury",
+  "mode": "dark_and_light",
+  "colors": {
+    "primary": "#E5C1CD", 
+    "secondary": "#D4AF37",
+    "background_dark": "#1A1A1A",
+    "background_light": "#FDFBF7",
+    "text_dark": "#FDFBF7",
+    "text_light": "#1A1A1A",
+    "card_dark_glass": "rgba(26, 26, 26, 0.7)",
+    "card_border_dark": "rgba(212, 175, 55, 0.2)"
+  },
+  "typography": {
+    "headings": {
+      "family": "Cormorant Garamond, serif",
+      "weights": [400, 600, 700],
+      "instruction": "Use for all main section titles and hero. Apply tracking-tight for high-end editorial feel."
+    },
+    "body": {
+      "family": "Manrope, sans-serif",
+      "weights": [300, 400, 500],
+      "instruction": "Use for all body text, UI elements, buttons, and booking form. High legibility."
+    }
+  },
+  "visual_enhancers": {
+    "glassmorphism": "Use backdrop-blur-xl or backdrop-blur-2xl on dark mode cards. Border MUST be 1px solid rgba(229, 193, 205, 0.15) for crispness.",
+    "lighting": "Subtle radial gradient behind hero text and key interactive elements using #D4AF37 at 10% opacity.",
+    "micro_interactions": "Smooth hover lifts (-translate-y-1) on cards, tactile scale down on button click (scale-95).",
+    "motion": "Framer motion for smooth liquid transitions. Staggered fade-ins for service menu list items."
+  },
+  "layouts": {
+    "hero": "Full height or max-h-[80vh]. Central large editorial typography. Carousel of salon interior photos with heavy overlay for text readability (e.g., bg-black/40).",
+    "menu_section": "Dual category tabs (Men / Women). Bento-style grid for service cards. grid-cols-1 md:grid-cols-2 lg:grid-cols-3.",
+    "booking_modal": "Multi-step flow, central floating glass modal with z-50 overlay. Minimalist progress indicator.",
+    "manager_dashboard": "Dense data layout. Use grid-cols-1 md:grid-cols-4 for stats, and table for booking feed. Strict hierarchical spacing."
+  },
+  "components": [
+    {
+      "name": "LuxuryButton",
+      "path": "src/components/ui/luxury-button.js",
+      "instruction": "Pill-shaped, background gradient or solid Champagne Gold. Hover effect: slight glow and text color change."
+    },
+    {
+      "name": "ServiceCard",
+      "path": "src/components/ui/service-card.js",
+      "instruction": "Glassmorphism card in dark mode, flat subtle shadow card in light mode. Contains price, duration, and '+ Add to Booking' chip."
+    }
+  ],
+  "accessibility": {
+    "contrast": "Ensure primary buttons and text pass APCA. Dark mode text must be highly visible.",
+    "focus_states": "Use ring-2 ring-[#D4AF37] ring-offset-2 for focus states on inputs and buttons.",
+    "data_testid": "All interactive elements MUST include data-testid based on role."
+  },
+  "image_urls": [
+    {
+      "category": "Hero Background / Salon Interior",
+      "url": "https://images.unsplash.com/photo-1773904215697-e6c21fc27ac2?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2NzR8MHwxfHNlYXJjaHwxfHxsdXh1cnklMjBzYWxvbiUyMGludGVyaW9yfGVufDB8fHx8MTc4NTI4NzE4Mnww&ixlib=rb-4.1.0&q=85",
+      "description": "Luxurious barber chairs and sinks in a dimly lit salon"
+    },
+    {
+      "category": "Hero Background / Salon Interior",
+      "url": "https://images.pexels.com/photos/13068377/pexels-photo-13068377.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+      "description": "Chic modern beauty salon with black and white decor"
+    },
+    {
+      "category": "Service Category - Hair Styling",
+      "url": "https://images.unsplash.com/photo-1560869713-bf165a9cfac1?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1NjZ8MHwxfHNlYXJjaHwzfHxoYWlyJTIwc3R5bGluZyUyMGx1eHVyeXxlbnwwfHx8fDE3ODU0MzgzMDd8MA&ixlib=rb-4.1.0&q=85",
+      "description": "Luxurious hair styling close up"
+    },
+    {
+      "category": "Service Category - Spa / Facial",
+      "url": "https://images.pexels.com/photos/36436447/pexels-photo-36436447.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+      "description": "Rejuvenating facial mask treatment"
+    }
+  ],
+  "instructions_to_main_agent": [
+    "Prioritize Apple-grade luxury aesthetic: high contrast, smooth typography scales, negative space.",
+    "Do NOT use HTML <select> or native <input type='date'>. Use Shadcn components for all forms.",
+    "Implement file extensions as .js / .jsx, NOT .tsx, as the environment uses JavaScript.",
+    "Ensure dark mode is the default for a premium salon vibe, with a toggle for the off-white light mode.",
+    "Include actual WhatsApp integration link (wa.me/919494542999) with a pre-filled booking summary text.",
+    "For the Manager Dashboard, create a clean tabular layout for bookings with status badges."
+  ],
+  "UNIVERSAL_GUIDELINES_FOR_MAIN_AGENT": [
+    "Create depth through layered design elements with z-index hierarchy.",
+    "Use glass-morphism effects with backdrop filters (12-24px blur).",
+    "Never apply universal transition (transition: all). Add transitions for specific interactive elements.",
+    "Do not center align the app container (.App { text-align: center; } is forbidden).",
+    "Always use modern button styles (pill-shaped) with interaction animations.",
+    "No AI emojis (🤖🧠💭).",
+    "Every interaction needs micro-animations - hover states, transitions.",
+    "Use 2-3x more spacing than feels comfortable. Cramped designs look cheap.",
+    "All interactive elements MUST include a data-testid attribute."
+  ]
+}
