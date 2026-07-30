@@ -3,7 +3,7 @@ import axios from "axios";
 import { AnimatePresence, motion } from "framer-motion";
 import { X, ChevronLeft, ChevronRight, Trash2, Sparkles, MessageCircle, Check } from "lucide-react";
 import { toast } from "sonner";
-import { Dialog, DialogContent } from "../components/ui/dialog";
+import { Dialog, DialogContent, DialogTitle } from "../components/ui/dialog";
 import { Input } from "../components/ui/input";
 import { Textarea } from "../components/ui/textarea";
 import { Label } from "../components/ui/label";
@@ -85,6 +85,7 @@ const BookingModal = ({ open, onOpenChange, selected, setSelected, allServices }
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-4xl p-0 border-0 overflow-hidden rounded-3xl bg-transparent shadow-none" data-testid="booking-modal">
+        <DialogTitle className="sr-only">Book Appointment at KBS Beauty Saloon</DialogTitle>
         <div className="kbs-glass-light rounded-3xl overflow-hidden">
           <div className="flex items-center justify-between px-6 py-5 border-b border-[#E7DFCF] bg-white/70">
             <div>
