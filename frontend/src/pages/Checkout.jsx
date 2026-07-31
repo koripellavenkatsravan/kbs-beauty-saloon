@@ -19,7 +19,7 @@ const PAY_APPS = [
 ];
 
 const Checkout = () => {
-  const { user, auth, setAuthOpen, refreshMe } = useAuth();
+  const { user, auth, setAuthOpen, refreshMe, loading } = useAuth();
   const { items, clear } = useCart();
   const navigate = useNavigate();
   const [order, setOrder] = useState(null);
@@ -32,8 +32,8 @@ const Checkout = () => {
   }, []);
 
   useEffect(() => {
-    if (!user) { setAuthOpen(true); navigate("/"); }
-  }, [user, setAuthOpen, navigate]);
+    if (!loading && !user) { setAuthOpen(true); navigate("/"); }
+  }, [user, loading, setAuthOpen, navigate]);
 
   const placeOrder = async () => {
     setPlacing(true);
