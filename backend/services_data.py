@@ -198,7 +198,17 @@ SERVICES = [
     {"name": "Waxing Chin", "price": 60, "category": "Cleanups, Facials & D-Tan", "subcategory": "Waxing", "gender": "women"},
     {"name": "Waxing Side Locks", "price": 125, "category": "Cleanups, Facials & D-Tan", "subcategory": "Waxing", "gender": "women"},
     {"name": "Waxing Face", "price": 200, "category": "Cleanups, Facials & D-Tan", "subcategory": "Waxing", "gender": "women"},
-    {"name": "Waxing Full Body", "price": 3500, "category": "Cleanups, Facials & D-Tan", "subcategory": "Waxing", "gender": "women"},
+    # BRIDAL & GROOM (exclusively bridal section)
+    {"name": "Economy Pre-Bridal Package", "price": 8383, "category": "Bridal & Groom", "subcategory": "Pre-Bridal Packages", "gender": "women", "description": "Cleanse, glow & pre-wedding hair rituals"},
+    {"name": "Executive Pre-Bridal Package", "price": 15090, "category": "Bridal & Groom", "subcategory": "Pre-Bridal Packages", "gender": "women", "description": "Advanced facials, spa, body polish & mani-pedi"},
+    {"name": "Economy Pre-Groom Package", "price": 5216, "category": "Bridal & Groom", "subcategory": "Pre-Groom Packages", "gender": "men", "description": "Grooming essentials for the big day"},
+    {"name": "Executive Pre-Groom Package", "price": 11385, "category": "Bridal & Groom", "subcategory": "Pre-Groom Packages", "gender": "men", "description": "Full spa, facial & styling package"},
+    {"name": "Bridal Makeup - Classic", "price": 3000, "category": "Bridal & Groom", "subcategory": "Bridal Makeup", "gender": "women", "description": "Signature classic bridal look"},
+    {"name": "Bridal Makeup - Signature", "price": 5000, "category": "Bridal & Groom", "subcategory": "Bridal Makeup", "gender": "women", "description": "Editorial glam with HD finish"},
+    {"name": "Bridal Makeup - Couture", "price": 8000, "category": "Bridal & Groom", "subcategory": "Bridal Makeup", "gender": "women", "description": "Airbrush + hair + drapery"},
+    {"name": "Mehendi - Simple Design", "price": 500, "category": "Bridal & Groom", "subcategory": "Mehendi Services", "gender": "women", "description": "Elegant motifs for engagement"},
+    {"name": "Mehendi - Full Hands & Feet", "price": 2000, "category": "Bridal & Groom", "subcategory": "Mehendi Services", "gender": "women", "description": "Traditional bridal mehendi"},
+    {"name": "Mehendi - Royal Bridal Set", "price": 4000, "category": "Bridal & Groom", "subcategory": "Mehendi Services", "gender": "women", "description": "Full bridal — hands, arms, legs, feet"},
 ]
 
 STYLISTS = [

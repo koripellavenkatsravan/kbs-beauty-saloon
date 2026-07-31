@@ -4,8 +4,8 @@ export const SALON = {
   tagline: "Elevate Your Beauty & Wellness",
   address:
     "7-190/1/15, Venkateswara complex, opp. Reliance Fresh, Sujatha Nagar, Chinnamusidivada, Andhra Pradesh 530051",
-  phoneDisplay: "094945 42999",
-  phoneWa: "919494542999",
+  phoneDisplay: "99639 38553",
+  phoneWa: "919963938553",
   email: "prasanthi3536@gmail.com",
 };
 
@@ -29,17 +29,123 @@ export const STOCK_HERO = [
 
 export const CATEGORY_IMAGES = {
   "Special Combos":
-    "https://images.unsplash.com/photo-1596178065887-1198b6148b2b?auto=format&fit=crop&w=1000&q=80",
+    "https://customer-assets-v7afamib.emergentagent.net/job_elegant-salon-app/artifacts/mwt96e4k_image.png",
   "Men's Services":
-    "https://images.unsplash.com/photo-1503951914875-452162b0f3f1?auto=format&fit=crop&w=1000&q=80",
+    "https://customer-assets-v7afamib.emergentagent.net/job_elegant-salon-app/artifacts/ghca5ths_image.png",
   "Women's Services":
-    "https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=1000&q=80",
+    "https://customer-assets-v7afamib.emergentagent.net/job_elegant-salon-app/artifacts/hx1b7lp1_image.png",
   "Pedicure & Manicure":
-    "https://images.unsplash.com/photo-1610992015762-45dca7a5a096?auto=format&fit=crop&w=1000&q=80",
+    "https://images.unsplash.com/photo-1604654894610-df63bc536371?auto=format&fit=crop&w=1000&q=80",
   "Massages & Body Care":
     "https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=1000&q=80",
   "Cleanups, Facials & D-Tan":
     "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?auto=format&fit=crop&w=1000&q=80",
+};
+
+// Visual images per top-level category card (per user-provided mapping)
+export const VISUAL_CATEGORIES = {
+  women: [
+    {
+      key: "combos-w",
+      title: "Korean Spa Combo",
+      subtitle: "Glass Skin & Glow",
+      image: "https://customer-assets-v7afamib.emergentagent.net/job_elegant-salon-app/artifacts/mwt96e4k_image.png",
+      match: (s) => s.category === "Special Combos",
+    },
+    {
+      key: "haircuts-w",
+      title: "Haircuts & Creative Styling",
+      subtitle: "Editorial hair artistry",
+      image: "https://customer-assets-v7afamib.emergentagent.net/job_elegant-salon-app/artifacts/hx1b7lp1_image.png",
+      match: (s) => ["Hair Cuts", "Hair Wash & Styling"].includes(s.subcategory) && (s.gender === "women" || s.gender === "unisex"),
+    },
+    {
+      key: "care-w",
+      title: "Hair Care & Advanced Treatments",
+      subtitle: "Spa · Colour · Botox · Keratin",
+      image: "https://customer-assets-v7afamib.emergentagent.net/job_elegant-salon-app/artifacts/40c7qthn_image.png",
+      match: (s) => ["Care, Spa & Treatments","Hair Colour","Hair Treatments"].includes(s.subcategory) && (s.gender === "women" || s.gender === "unisex"),
+    },
+    {
+      key: "facials-w",
+      title: "Facials, Cleanups & D-Tan",
+      subtitle: "Basic to Advanced · O3 Series",
+      image: "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?auto=format&fit=crop&w=1200&q=85",
+      match: (s) => ["Basic Facials","Advanced Facials","Masks & Cleanups","D-Tan"].includes(s.subcategory),
+    },
+    {
+      key: "threading-w",
+      title: "Threading, Waxing & Gunshot Piercing",
+      subtitle: "Precise · Painless · Pretty",
+      image: "https://images.unsplash.com/photo-1590346566789-a48f2d80b3ac?auto=format&fit=crop&w=1200&q=85",
+      match: (s) => ["Threading","Waxing","Piercing"].includes(s.subcategory),
+    },
+    {
+      key: "pediman-w",
+      title: "Pedicure, Manicure & Foot Care",
+      subtitle: "Crystal · O3+ · Heel Peel",
+      image: "https://images.unsplash.com/photo-1604654894610-df63bc536371?auto=format&fit=crop&w=1200&q=85",
+      match: (s) => s.category === "Pedicure & Manicure",
+    },
+    {
+      key: "massage-w",
+      title: "Massages, Body Care & Spa Rituals",
+      subtitle: "Relax · Detox · Restore",
+      image: "https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=1200&q=85",
+      match: (s) => s.category === "Massages & Body Care",
+    },
+  ],
+  men: [
+    {
+      key: "combos-m",
+      title: "Korean Spa Combo",
+      subtitle: "Relax, Detox & Glow",
+      image: "https://customer-assets-v7afamib.emergentagent.net/job_elegant-salon-app/artifacts/o8cm5qqr_image.png",
+      match: (s) => s.category === "Special Combos",
+    },
+    {
+      key: "haircuts-m",
+      title: "Haircuts & Styling",
+      subtitle: "Sharp cuts · Beard artistry",
+      image: "https://customer-assets-v7afamib.emergentagent.net/job_elegant-salon-app/artifacts/ghca5ths_image.png",
+      match: (s) => s.subcategory === "Hair Cuts & Styling",
+    },
+    {
+      key: "colour-m",
+      title: "Hair Coloring",
+      subtitle: "Majirel · Inoa · Streaks",
+      image: "https://customer-assets-v7afamib.emergentagent.net/job_elegant-salon-app/artifacts/40c7qthn_image.png",
+      match: (s) => s.subcategory === "Hair Coloring",
+    },
+    {
+      key: "treatments-m",
+      title: "Hair Treatments & Texturing",
+      subtitle: "Botox · Nanoplus · Straightening",
+      image: "https://images.unsplash.com/photo-1585747860715-2ba37e788b70?auto=format&fit=crop&w=1200&q=85",
+      match: (s) => s.subcategory === "Hair Treatments",
+    },
+    {
+      key: "facials-m",
+      title: "Facials, Cleanups & D-Tan",
+      subtitle: "Refresh · Reveal · Glow",
+      image: "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?auto=format&fit=crop&w=1200&q=85",
+      match: (s) => ["Basic Facials","Advanced Facials","Masks & Cleanups","D-Tan"].includes(s.subcategory),
+    },
+    {
+      key: "pediman-m",
+      title: "Pedicure & Manicure",
+      subtitle: "Basic to Crystal",
+      image: "https://images.unsplash.com/photo-1604654894610-df63bc536371?auto=format&fit=crop&w=1200&q=85",
+      match: (s) => s.category === "Pedicure & Manicure",
+    },
+    {
+      key: "massage-m",
+      title: "Massages & Body Care",
+      subtitle: "Head · Foot · Full body",
+      image: "https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=1200&q=85",
+      match: (s) => s.category === "Massages & Body Care",
+    },
+  ],
 };
 
 export const INDIAN_STATES = [

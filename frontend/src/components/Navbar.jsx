@@ -36,10 +36,12 @@ const Navbar = ({ onBookClick, onMenuClick }) => {
           </div>
         </a>
 
-        <nav className="hidden md:flex items-center gap-8 text-sm">
+        <nav className="hidden lg:flex items-center gap-7 text-sm">
           <a href="#menu" onClick={onMenuClick} className="hover:text-[#B7902B] transition-colors" data-testid="nav-menu">Menu</a>
+          <a href="#trending" className="hover:text-[#B7902B] transition-colors" data-testid="nav-trending">Trending</a>
           <a href="#reviews" className="hover:text-[#B7902B] transition-colors" data-testid="nav-reviews">Reviews</a>
           <a href="#about" className="hover:text-[#B7902B] transition-colors" data-testid="nav-about">About</a>
+          <a href="#bridal" className="hover:text-[#B7902B] transition-colors" data-testid="nav-bridal">Bridal</a>
           <a href="#contact" className="hover:text-[#B7902B] transition-colors" data-testid="nav-contact">Contact</a>
           <Link to="/admin" className="hover:text-[#B7902B] transition-colors" data-testid="nav-admin">Manager</Link>
         </nav>

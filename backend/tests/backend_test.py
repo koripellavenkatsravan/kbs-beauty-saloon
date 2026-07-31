@@ -28,6 +28,55 @@ class TestPublic:
         for k in ["id", "name", "price", "category", "subcategory", "gender", "available"]:
             assert k in s, f"missing {k} in service schema"
 
+    def test_bridal_services_present(self):
+        r = requests.get(f"{API}/services", timeout=30)
+        assert r.status_code == 200
+        data = r.json()
+        bridal = [s for s in data if s["category"] == "Bridal & Groom"]
+        assert len(bridal) >= 10, f"expected >=10 Bridal & Groom services, got {len(bridal)}"
+        subs = {s["subcategory"] for s in bridal}
+        for expected in ["Bridal Makeup", "Pre-Bridal Packages", "Pre-Groom Packages", "Mehendi Services"]:
+            assert expected in subs, f"missing subcategory {expected} — got {subs}"
+        # Specific package price checks
+        expected_prices = {
+            "Economy Pre-Bridal Package": 8383,
+            "Executive Pre-Bridal Package": 15090,
+            "Economy Pre-Groom Package": 5216,
+            "Executive Pre-Groom Package": 11385,
+            "Bridal Makeup - Classic": 3000,
+            "Bridal Makeup - Signature": 5000,
+            "Bridal Makeup - Couture": 8000,
+        }
+        by_name = {s["name"]: s for s in bridal}
+        for name, price in expected_prices.items():
+            assert name in by_name, f"missing bridal package {name}"
+            assert by_name[name]["price"] == price, f"{name}: expected ₹{price} got ₹{by_name[name]['price']}"
+        # Mehendi variants exist
+        mehendi = [s for s in bridal if s["subcategory"] == "Mehendi Services"]
+        assert len(mehendi) >= 3, f"expected 3 mehendi variants got {len(mehendi)}"
+
+    def test_booking_with_bridal_service(self):
+        data = requests.get(f"{API}/services", timeout=30).json()
+        bridal = next(s for s in data if s["name"] == "Bridal Makeup - Signature")
+        regular = next(s for s in data if s["name"] == "Basic Haircut")
+        picked = [
+            {"id": bridal["id"], "name": bridal["name"], "price": bridal["price"]},
+            {"id": regular["id"], "name": regular["name"], "price": regular["price"]},
+        ]
+        expected_total = bridal["price"] + regular["price"]
+        payload = {
+            "services": picked, "stylist": "Meera", "date": FUTURE_DATE, "time": "12:15",
+            "full_name": "TEST_Bridal Mix", "phone": "9999999998",
+            "email": "delivered@resend.dev", "state": "Andhra Pradesh",
+            "city": "Visakhapatnam", "notes": "bridal mix test",
+        }
+        r = requests.post(f"{API}/bookings", json=payload, timeout=60)
+        assert r.status_code == 200, r.text
+        d = r.json()
+        assert d["status"] == "Pending"
+        assert d["total"] == expected_total, f"expected total ₹{expected_total} got ₹{d['total']}"
+        assert len(d["services"]) == 2
+
     def test_stylists(self):
         r = requests.get(f"{API}/stylists", timeout=30)
         assert r.status_code == 200

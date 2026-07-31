@@ -2,7 +2,9 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Navbar from "../components/Navbar";
 import Hero from "../components/Hero";
+import TrendingSection from "../components/TrendingSection";
 import MenuSection from "../components/MenuSection";
+import BridalSection from "../components/BridalSection";
 import BookingModal from "../components/BookingModal";
 import Reviews from "../components/Reviews";
 import About from "../components/About";
@@ -15,6 +17,7 @@ const Home = () => {
   const [services, setServices] = useState([]);
   const [selected, setSelected] = useState([]);
   const [open, setOpen] = useState(false);
+  const [menuQuery, setMenuQuery] = useState("");
 
   useEffect(() => {
     axios.get(`${API}/services`).then((r) => setServices(r.data)).catch(() => setServices([]));
@@ -25,16 +28,23 @@ const Home = () => {
   };
 
   const openBooking = () => setOpen(true);
+
   const scrollToMenu = () => {
-    const el = document.getElementById("menu");
-    el?.scrollIntoView({ behavior: "smooth" });
+    document.getElementById("menu")?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  const onQuickBook = (searchName) => {
+    setMenuQuery(searchName);
+    setTimeout(() => scrollToMenu(), 60);
   };
 
   return (
     <>
       <Navbar onBookClick={openBooking} onMenuClick={scrollToMenu} />
       <Hero onBookClick={openBooking} onMenuClick={scrollToMenu} />
-      <MenuSection services={services} onAdd={onAdd} selected={selected} />
+      <TrendingSection onQuickBook={onQuickBook} />
+      <MenuSection services={services} onAdd={onAdd} selected={selected} initialQuery={menuQuery} />
+      <BridalSection services={services} onAdd={onAdd} selected={selected} />
       <Reviews />
       <About />
 
@@ -46,7 +56,6 @@ const Home = () => {
         allServices={services}
       />
 
-      {/* Floating WA + cart */}
       <a
         href={`https://wa.me/${SALON.phoneWa}?text=${encodeURIComponent("Hi KBS Beauty Saloon, I'd like to know more.")}`}
         target="_blank" rel="noopener noreferrer"
