@@ -86,6 +86,7 @@ const BookingModal = ({ open, onOpenChange, selected, setSelected, allServices }
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-4xl p-0 border-0 overflow-hidden rounded-3xl bg-transparent shadow-none" data-testid="booking-modal">
         <DialogTitle className="sr-only">Book Appointment at KBS Beauty Saloon</DialogTitle>
+        <DialogDescription className="sr-only">Step-by-step booking: choose services, stylist, date and time, and confirm your appointment.</DialogDescription>
         <div className="kbs-glass-light rounded-3xl overflow-hidden">
           <div className="flex items-center justify-between px-6 py-5 border-b border-[#E7DFCF] bg-white/70">
             <div>
@@ -301,17 +302,6 @@ const BookingModal = ({ open, onOpenChange, selected, setSelected, allServices }
                     <Sparkles size={16}/> {loading ? "Sending…" : "Confirm Booking"}
                   </button>
                 )}
-              </div>
-            </div>
-          )}
-        </div>
-      </DialogContent>
-    </Dialog>
-  );
-};
-
-export default BookingModal;
-   )}
               </div>
             </div>
           )}
