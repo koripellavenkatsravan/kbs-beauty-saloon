@@ -11,6 +11,13 @@ import { SALON } from "../lib/kbs";
 
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
 
+const PAY_APPS = [
+  { name: "PhonePe", color: "#5F259F", letter: "P" },
+  { name: "Google Pay", color: "#1A73E8", letter: "G" },
+  { name: "Paytm", color: "#00BAF2", letter: "Pt" },
+  { name: "CRED", color: "#1A1A1A", letter: "C" },
+];
+
 const Checkout = () => {
   const { user, auth, setAuthOpen, refreshMe } = useAuth();
   const { items, clear } = useCart();
@@ -59,10 +66,9 @@ const Checkout = () => {
   )}` : "#";
 
   const subtotal = items.reduce((s, x) => s + (x.price || 0), 0);
-  const tax = Math.round(subtotal * 0.18);
   const points = user?.loyalty_points || 0;
   const discount = order ? order.discount : Math.min(points, Math.floor(subtotal / 2));
-  const total = subtotal + tax - discount;
+  const total = subtotal - discount;
   const qrUrl = order ? `${API}/orders/${order.id}/qr` : null;
 
   return (
@@ -96,7 +102,6 @@ const Checkout = () => {
 
             <div className="mt-4 space-y-1.5 text-sm">
               <div className="flex justify-between"><span>Subtotal</span><span>₹{(order ? order.subtotal : subtotal).toLocaleString()}</span></div>
-              <div className="flex justify-between"><span>GST (18%)</span><span>₹{(order ? order.tax : tax).toLocaleString()}</span></div>
               {discount > 0 && (
                 <div className="flex justify-between text-[#1e6b3c]"><span>Loyalty Discount</span><span>− ₹{discount.toLocaleString()}</span></div>
               )}
@@ -125,8 +130,8 @@ const Checkout = () => {
 
           {/* RIGHT — Payment */}
           <div className="kbs-card rounded-3xl p-6">
-            <div className="text-[10px] uppercase tracking-[0.24em] text-[#8a6c1e]">Pay Directly to Salon Account</div>
-            <div className="font-serif-kbs text-2xl mt-1 text-[#1A1A1A]">UPI · Bank Transfer</div>
+            <div className="text-[10px] uppercase tracking-[0.24em] text-[#8a6c1e]">Pay Securely via UPI</div>
+            <div className="font-serif-kbs text-2xl mt-1 text-[#1A1A1A]">Scan · Pay · Confirm</div>
 
             {!order ? (
               <div className="mt-6 text-sm text-[#8a6c1e]">Place your order to reveal the dynamic UPI QR for ₹{total.toLocaleString()}.</div>
@@ -139,21 +144,30 @@ const Checkout = () => {
                   >
                     <img src={qrUrl} alt="Pay via UPI" className="w-56 h-56" data-testid="upi-qr-image"/>
                   </motion.div>
-                  <div className="mt-3 text-xs text-[#8a6c1e]">Scan with any UPI app (GPay, PhonePe, Paytm, BHIM)</div>
-                  <div className="font-serif-kbs text-3xl mt-2 text-[#B7902B]">₹{order.total.toLocaleString()}</div>
+                  <div className="mt-3 text-xs text-[#8a6c1e]">Scan with any UPI app</div>
+                  <div className="font-serif-kbs text-4xl mt-2 text-[#B7902B]">₹{order.total.toLocaleString()}</div>
+                </div>
+
+                {/* Payment app badges */}
+                <div className="mt-6 flex items-center justify-center gap-3 flex-wrap" data-testid="pay-apps">
+                  {PAY_APPS.map((a) => (
+                    <div key={a.name} className="flex items-center gap-2 px-3 py-2 rounded-full bg-white border border-[#E7DFCF] shadow-sm">
+                      <div className="h-7 w-7 rounded-full grid place-items-center text-[11px] font-bold text-white" style={{ background: a.color }}>{a.letter}</div>
+                      <span className="text-xs font-medium text-[#1A1A1A]">{a.name}</span>
+                    </div>
+                  ))}
                 </div>
               </>
             )}
 
+            {/* UPI ID quick copy — ONLY UPI, no bank details */}
             {payInfo && (
-              <div className="mt-6 rounded-2xl border border-[#E7DFCF] bg-white overflow-hidden">
-                <div className="px-4 py-3 bg-[#FBF3E6] text-[10px] uppercase tracking-[0.24em] text-[#8a6c1e]">Bank Details</div>
-                <div className="px-4 py-3 space-y-2 text-sm">
-                  <RowCopy label="UPI ID" value={payInfo.upi_id} onCopy={copy} tid="copy-upi"/>
-                  <RowCopy label="Account No." value={payInfo.bank_account} onCopy={copy} tid="copy-acc"/>
-                  <RowCopy label="IFSC Code" value={payInfo.bank_ifsc} onCopy={copy} tid="copy-ifsc"/>
-                  <RowCopy label="Account Name" value={payInfo.upi_name} onCopy={copy} tid="copy-name"/>
+              <div className="mt-6 rounded-2xl border border-[#E7DFCF] bg-[#FBF3E6] p-4 flex items-center justify-between" data-testid="upi-id-block">
+                <div>
+                  <div className="text-[10px] uppercase tracking-[0.24em] text-[#8a6c1e]">UPI ID</div>
+                  <div className="font-mono text-[15px] text-[#1A1A1A] mt-0.5">{payInfo.upi_id}</div>
                 </div>
+                <button onClick={() => copy(payInfo.upi_id)} className="btn-outline-gold px-4 py-2 rounded-full text-xs inline-flex items-center gap-1" data-testid="copy-upi"><Copy size={13}/> Copy</button>
               </div>
             )}
 
@@ -173,15 +187,5 @@ const Checkout = () => {
     </div>
   );
 };
-
-const RowCopy = ({ label, value, onCopy, tid }) => (
-  <div className="flex items-center justify-between">
-    <div>
-      <div className="text-[10px] uppercase tracking-[0.22em] text-[#8a6c1e]">{label}</div>
-      <div className="font-mono text-[13px] text-[#1A1A1A]">{value}</div>
-    </div>
-    <button onClick={() => onCopy(value)} className="p-2 rounded-full hover:bg-[#F6EFE2]" data-testid={tid}><Copy size={14}/></button>
-  </div>
-);
 
 export default Checkout;

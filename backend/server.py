@@ -435,11 +435,10 @@ async def orders_checkout(payload: OrderCreate, user: dict = Depends(get_current
     if not items:
         raise HTTPException(status_code=400, detail="Cart is empty")
     subtotal = sum(int(i.get("price", 0)) for i in items)
-    tax = round(subtotal * 0.18)  # 18% GST
-    # Loyalty: 100 points = ₹100 discount, don't allow more than available
+    # Loyalty: 100 points = ₹100 discount, don't allow more than 50% of subtotal
     points = int(user.get("loyalty_points", 0) or 0)
-    discount = min(points, subtotal // 2)  # cap at 50% of subtotal
-    total = subtotal + tax - discount
+    discount = min(points, subtotal // 2)
+    total = subtotal - discount
     order = {
         "id": str(uuid.uuid4()),
         "user_id": user["id"],
@@ -447,7 +446,6 @@ async def orders_checkout(payload: OrderCreate, user: dict = Depends(get_current
         "name": user["name"],
         "items": items,
         "subtotal": subtotal,
-        "tax": tax,
         "discount": discount,
         "total": total,
         "stylist": payload.stylist or "Any Available",

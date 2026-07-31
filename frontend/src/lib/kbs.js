@@ -59,14 +59,14 @@ export const VISUAL_CATEGORIES = {
       key: "combos-w",
       title: "Korean Spa Combo",
       subtitle: "Glass Skin & Glow",
-      image: "https://customer-assets-v7afamib.emergentagent.net/job_elegant-salon-app/artifacts/mwt96e4k_image.png",
+      image: "https://customer-assets-v7afamib.emergentagent.net/job_elegant-salon-app/artifacts/chhcei7i_Screenshot%202026-07-31%20113209.png",
       match: (s) => s.category === "Special Combos",
     },
     {
       key: "haircuts-w",
       title: "Haircuts & Creative Styling",
       subtitle: "Editorial hair artistry",
-      image: "https://customer-assets-v7afamib.emergentagent.net/job_elegant-salon-app/artifacts/hx1b7lp1_image.png",
+      image: "https://customer-assets-v7afamib.emergentagent.net/job_elegant-salon-app/artifacts/8xh9qcwt_Screenshot%202026-07-31%20113403.png",
       match: (s) => ["Hair Cuts", "Hair Wash & Styling"].includes(s.subcategory) && (s.gender === "women" || s.gender === "unisex"),
     },
     {
@@ -110,7 +110,7 @@ export const VISUAL_CATEGORIES = {
       key: "combos-m",
       title: "Korean Spa Combo",
       subtitle: "Relax, Detox & Glow",
-      image: "https://customer-assets-v7afamib.emergentagent.net/job_elegant-salon-app/artifacts/o8cm5qqr_image.png",
+      image: "https://customer-assets-v7afamib.emergentagent.net/job_elegant-salon-app/artifacts/a9rwtded_Screenshot%202026-07-31%20112626.png",
       match: (s) => s.category === "Special Combos",
     },
     {
@@ -124,7 +124,7 @@ export const VISUAL_CATEGORIES = {
       key: "colour-m",
       title: "Hair Coloring",
       subtitle: "Majirel · Inoa · Streaks",
-      image: "https://customer-assets-v7afamib.emergentagent.net/job_elegant-salon-app/artifacts/40c7qthn_image.png",
+      image: "https://customer-assets-v7afamib.emergentagent.net/job_elegant-salon-app/artifacts/gdacz180_Screenshot%202026-07-31%20113043.png",
       match: (s) => s.subcategory === "Hair Coloring",
     },
     {
@@ -138,7 +138,7 @@ export const VISUAL_CATEGORIES = {
       key: "facials-m",
       title: "Facials, Cleanups & D-Tan",
       subtitle: "Refresh · Reveal · Glow",
-      image: "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?auto=format&fit=crop&w=1200&q=85",
+      image: "https://customer-assets-v7afamib.emergentagent.net/job_elegant-salon-app/artifacts/5saurnjb_Screenshot%202026-07-31%20112904.png",
       match: (s) => ["Basic Facials","Advanced Facials","Masks & Cleanups","D-Tan"].includes(s.subcategory),
     },
     {

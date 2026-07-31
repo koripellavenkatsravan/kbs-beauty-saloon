@@ -69,12 +69,11 @@ export const CartProvider = ({ children }) => {
   }, [token, auth]);
 
   const subtotal = items.reduce((s, x) => s + (x.price || 0), 0);
-  const tax = Math.round(subtotal * 0.18);
-  const total = subtotal + tax;
+  const total = subtotal;
 
   return (
     <CartContext.Provider value={{
-      items, addItem, removeItem, clear, subtotal, tax, total,
+      items, addItem, removeItem, clear, subtotal, total,
       cartOpen, setCartOpen,
     }}>
       {children}

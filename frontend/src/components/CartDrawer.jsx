@@ -6,7 +6,7 @@ import { useAuth } from "../lib/AuthContext";
 import { useNavigate } from "react-router-dom";
 
 const CartDrawer = () => {
-  const { items, cartOpen, setCartOpen, removeItem, subtotal, tax, total } = useCart();
+  const { items, cartOpen, setCartOpen, removeItem, subtotal, total } = useCart();
   const { user, setAuthOpen } = useAuth();
   const navigate = useNavigate();
 
@@ -67,7 +67,6 @@ const CartDrawer = () => {
             {items.length > 0 && (
               <div className="border-t border-[#E7DFCF] p-6 bg-white space-y-2">
                 <div className="flex justify-between text-sm text-[#3d3d3d]"><span>Subtotal</span><span>₹{subtotal.toLocaleString()}</span></div>
-                <div className="flex justify-between text-sm text-[#3d3d3d]"><span>GST (18%)</span><span>₹{tax.toLocaleString()}</span></div>
                 <div className="flex justify-between font-serif-kbs text-2xl pt-1 border-t border-[#E7DFCF]"><span>Total</span><span className="text-[#B7902B]">₹{total.toLocaleString()}</span></div>
 
                 <button onClick={proceed} className="w-full btn-gold py-3 rounded-full text-sm font-semibold inline-flex items-center justify-center gap-2 mt-3" data-testid="cart-checkout-btn">

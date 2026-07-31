@@ -155,7 +155,7 @@ const BridalSection = ({ services, onAdd, selected }) => {
                     <div className="flex items-center gap-4 shrink-0">
                       <div className="font-serif-kbs text-2xl text-[#B7902B] whitespace-nowrap">{priceLabel(s)}</div>
                       <button
-                        onClick={() => { onAdd(s); addItem(s); setCartOpen(true); }}
+                        onClick={() => { onAdd(s); setCartOpen(true); }}
                         className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-xs font-medium transition-all hover:shadow-[0_10px_24px_-10px_rgba(212,175,55,0.7)] active:scale-95 ${
                           cartItems.some((x) => x.service_id === s.id) ? "bg-[#1A1A1A] text-[#D4AF37]" : "btn-gold"
                         }`}
