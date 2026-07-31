@@ -3,7 +3,7 @@ import axios from "axios";
 import { AnimatePresence, motion } from "framer-motion";
 import { X, ChevronLeft, ChevronRight, Trash2, Sparkles, MessageCircle, Check } from "lucide-react";
 import { toast } from "sonner";
-import { Dialog, DialogContent, DialogTitle } from "../components/ui/dialog";
+import { Dialog, DialogContent, DialogTitle, DialogDescription } from "../components/ui/dialog";
 import { Input } from "../components/ui/input";
 import { Textarea } from "../components/ui/textarea";
 import { Label } from "../components/ui/label";
@@ -301,6 +301,17 @@ const BookingModal = ({ open, onOpenChange, selected, setSelected, allServices }
                     <Sparkles size={16}/> {loading ? "Sending…" : "Confirm Booking"}
                   </button>
                 )}
+              </div>
+            </div>
+          )}
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
+};
+
+export default BookingModal;
+   )}
               </div>
             </div>
           )}
