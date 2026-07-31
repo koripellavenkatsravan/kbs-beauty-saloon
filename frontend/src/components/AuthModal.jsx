@@ -41,7 +41,7 @@ const AuthModal = () => {
     <Dialog open={authOpen} onOpenChange={setAuthOpen}>
       <DialogContent className="max-w-md p-0 border-0 rounded-3xl bg-transparent shadow-none overflow-hidden" data-testid="auth-modal">
         <DialogTitle className="sr-only">Sign in or Sign up to KBS Beauty Saloon</DialogTitle>
-        <DialogDescription className="sr-only">Authenticate with email and password or continue with Google to access your bookings, cart and loyalty points.</DialogDescription>
+        <DialogDescription className="sr-only">Sign in or create your KBS account to save bookings and re-book faster.</DialogDescription>
 
         <div className="kbs-glass-light rounded-3xl overflow-hidden">
           <div className="relative kbs-dark-panel p-6 pb-8">

@@ -47,7 +47,7 @@ const CartDrawer = () => {
           <motion.aside
             initial={{ x: "100%" }} animate={{ x: 0 }} exit={{ x: "100%" }}
             transition={{ type: "spring", damping: 30, stiffness: 260 }}
-            className="fixed top-0 right-0 h-full w-full max-w-md bg-[#FDFBF7] z-50 shadow-2xl flex flex-col"
+            className="fixed top-0 right-0 h-full w-full max-w-md bg-[#FDFBF7]/85 dark:bg-[#0F0F11]/85 backdrop-blur-2xl z-50 shadow-2xl flex flex-col border-l border-[#E7DFCF] dark:border-[#2a2a30]"
             data-testid="cart-drawer"
           >
             <div className="flex items-center justify-between px-6 py-5 border-b border-[#E7DFCF] kbs-dark-panel">

@@ -7,8 +7,7 @@ export const ThemeProvider = ({ children }) => {
   const [theme, setTheme] = useState(() => {
     const saved = localStorage.getItem(KEY);
     if (saved === "light" || saved === "dark") return saved;
-    // Auto: prefer luxury dark
-    if (window.matchMedia && window.matchMedia("(prefers-color-scheme: light)").matches) return "light";
+    // Spec: default to luxury Dark Gold on first visit
     return "dark";
   });
 
