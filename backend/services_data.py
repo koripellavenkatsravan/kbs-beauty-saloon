@@ -212,10 +212,10 @@ SERVICES = [
 ]
 
 STYLISTS = [
-    {"name": "Any Available", "specialty": "First available beautician"},
-    {"name": "Prasanthi", "specialty": "Senior Stylist & Owner"},
-    {"name": "Anjali", "specialty": "Hair Colour & Treatments"},
-    {"name": "Ravi", "specialty": "Men's Grooming"},
-    {"name": "Kavya", "specialty": "Facials & Skin Care"},
-    {"name": "Meera", "specialty": "Bridal & Makeup"},
+    {"name": "Any Available", "specialty": "First available beautician", "badge": "", "top_rated": False},
+    {"name": "Neeraj", "specialty": "Master Stylist", "badge": "Master Stylist · 4.9 ★", "top_rated": True},
+    {"name": "Bujji", "specialty": "Senior Colorist", "badge": "Senior Colorist · 4.9 ★", "top_rated": True},
+    {"name": "Naidu", "specialty": "Barber & Hair Specialist", "badge": "Barber & Hair Specialist", "top_rated": False},
+    {"name": "Aruna", "specialty": "Skin & Spa Specialist", "badge": "Skin & Spa Specialist", "top_rated": False},
+    {"name": "Akhil", "specialty": "Grooming & Hair Stylist", "badge": "Grooming & Hair Stylist", "top_rated": False},
 ]

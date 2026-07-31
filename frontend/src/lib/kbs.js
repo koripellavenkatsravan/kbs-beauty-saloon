@@ -4,10 +4,20 @@ export const SALON = {
   tagline: "Elevate Your Beauty & Wellness",
   address:
     "7-190/1/15, Venkateswara complex, opp. Reliance Fresh, Sujatha Nagar, Chinnamusidivada, Andhra Pradesh 530051",
-  phoneDisplay: "99639 38553",
-  phoneWa: "919963938553",
+  phoneDisplay: "094945 42999",
+  phoneWa: "919494542999",
+  phoneSecondary: "99639 38553",
+  phoneSecondaryWa: "919963938553",
   email: "prasanthi3536@gmail.com",
+  bank: {
+    account: "00000041651112710",
+    ifsc: "SBIN0021144",
+    upi: "pkoripella@ybl",
+  },
 };
+
+export const BRIDAL_IMAGE =
+  "https://customer-assets-v7afamib.emergentagent.net/job_elegant-salon-app/artifacts/b5ahhb2k_image.png";
 
 export const LOGO_URL =
   "https://customer-assets-lxgj4vgw.emergentagent.net/job_50ac1877-54cb-4185-997f-ed182c4b8961/artifacts/8rhcolpk_ChatGPT%20Image%20Jul%2017%2C%202026%2C%2012_18_40%20PM.png";

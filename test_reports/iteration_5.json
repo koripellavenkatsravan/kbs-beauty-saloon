@@ -1,0 +1,36 @@
+{
+  "summary": "V5 major-upgrade end-to-end test: 18/18 backend pytest cases (auth, stylists, cart, checkout math, QR PNG, payment/info, booking→user link, manager/orders) all PASS. Frontend UI: home renders with correct phone 094945 42999, nav links (Menu/Stylists/Bridal & Groom/Cart/Contact/Manager), Sign In/Up + Cart icon; StylistsSection shows 5 stylists; BridalSection uses the new red-lehenga image (b5ahhb2k_image.png). AuthModal register creates account and navbar switches to user button. Cart flow: add-service-btn increments cart badge to 1, second click is no-op, cart drawer opens. Signed-in Proceed to Checkout navigates to /checkout, place-order-btn returns order and shows upi-qr-image, bank details (UPI id pkoripella@ybl, account 00000041651112710, IFSC SBIN0021144, name KBS Beauty Saloon), WhatsApp link href contains UPI id, and confirm-paid-btn is present. Signed-out user sees 'Sign In to Checkout' in drawer (AuthModal-gated flow) — does not navigate to /checkout.",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": [
+      {"screen": "CartDrawer (desktop 1920px)", "issues": ["The drawer is very wide and pushes the primary CTA (Sign In to Checkout / Proceed to Checkout) slightly beyond a naive 1920px viewport when a scrollbar is present; button is reachable via scroll but sits at the far right edge. Consider max-w on the drawer sheet."]}
+    ]
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_v5_features.py",
+    "/app/backend/tests/backend_test.py",
+    "/app/test_reports/pytest/v5_results.xml"
+  ],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "server.py: orders_checkout total uses subtotal + tax - discount but the loyalty discount cap is `min(points, subtotal//2)` — cap is against subtotal (correct per spec), however description says 'capped at 50% of subtotal' — implementation matches. OK.",
+    "server.py: `order['_id'] = None; order.pop('_id', None)` after insert_one — Motor mutates the doc to add _id; the pop pattern works but is fragile. Prefer building a response dict from the original fields explicitly.",
+    "server.py POST /orders/checkout awards loyalty on total not subtotal — matches the spec note in agent_to_agent_context_note ('1 pt per ₹100 of total').",
+    "server.py: GET /orders/{order_id}/qr is unauthenticated (public) — anyone with the order id can generate a QR. Low risk (ids are UUIDs) but note.",
+    "server.py: server file is ~613 lines; consider splitting auth/cart/orders/manager into separate routers as it grows.",
+    "auth_login/register: password minimum length enforced only client-side (>=6). Backend accepts arbitrarily short/empty passwords. Consider server-side validation.",
+    "CORS: `allow_credentials=True` with `allow_origins=['*']` (default) is invalid per CORS spec — browsers will reject credentialed requests. Since the app uses Bearer tokens (not cookies) this happens to work, but set explicit CORS_ORIGINS in .env."
+  ],
+  "updated_files": [
+    "/app/backend/tests/test_v5_features.py (new — 18 test cases for v5 features)"
+  ],
+  "success_rate": {"backend": "100% (18/18)", "frontend": "100% on all v5 flows exercised"},
+  "test_credentials": "Admin admin@kbs.com / kbs@admin2026 — verified working. Test users created dynamically per test run (test_<uuid>@kbs.com / secret123). Manager token header X-Manager-Token: kbs@admin2026 verified.",
+  "seed_data_creation": "Backend pytest run created ~1 test user + 1 order + 1 booking per run (idempotent via unique uuid emails). Frontend run created 1 additional user + order (test_2f70f124@kbs.com).",
+  "retest_needed": false,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "Frontend uses localStorage key 'kbs_auth_token' for JWT; CartContext stores at 'kbs_cart' when signed-out and merges on login. Checkout page auto-redirects to '/' + opens AuthModal if !user. Signed-out cart drawer button label changes to 'Sign In to Checkout'. Cart drawer on 1920px viewport has the primary CTA near the right edge — use force=True + scrollIntoView if clicking via playwright. add-service-btn testids are like 'add-service-btn-<uuid>' — there are 139 of them on Home. QR endpoint /api/orders/{id}/qr is public.",
+  "rca of the issue": "N/A — no bugs found in this iteration."
+}

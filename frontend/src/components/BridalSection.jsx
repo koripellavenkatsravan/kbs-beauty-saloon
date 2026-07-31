@@ -1,7 +1,8 @@
 import React, { useMemo, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Plus, Check, MessageCircle, Sparkles } from "lucide-react";
-import { priceLabel, SALON } from "../lib/kbs";
+import { priceLabel, SALON, BRIDAL_IMAGE } from "../lib/kbs";
+import { useCart } from "../lib/CartContext";
 
 const TABS = [
   { key: "Bridal Makeup", label: "Bridal Makeup" },
@@ -18,11 +19,12 @@ const STAGES = [
   { key: "wedding", label: "Wedding Day", detail: "On-day styling, on-time, on-point" },
 ];
 
-const HERO_IMAGE = "https://images.unsplash.com/photo-1594736797933-d0501ba2fe65?auto=format&fit=crop&w=1600&q=85";
+const HERO_IMAGE = BRIDAL_IMAGE;
 
 const BridalSection = ({ services, onAdd, selected }) => {
   const [tab, setTab] = useState("Bridal Makeup");
   const [stage, setStage] = useState(0);
+  const { addItem, items: cartItems, setCartOpen } = useCart();
 
   const bridal = useMemo(() => services.filter((s) => s.category === "Bridal & Groom" && s.available), [services]);
   const items = useMemo(() => bridal.filter((s) => s.subcategory === tab), [bridal, tab]);
@@ -153,13 +155,13 @@ const BridalSection = ({ services, onAdd, selected }) => {
                     <div className="flex items-center gap-4 shrink-0">
                       <div className="font-serif-kbs text-2xl text-[#B7902B] whitespace-nowrap">{priceLabel(s)}</div>
                       <button
-                        onClick={() => onAdd(s)}
+                        onClick={() => { onAdd(s); addItem(s); setCartOpen(true); }}
                         className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-xs font-medium transition-all hover:shadow-[0_10px_24px_-10px_rgba(212,175,55,0.7)] active:scale-95 ${
-                          sel ? "bg-[#1A1A1A] text-[#D4AF37]" : "btn-gold"
+                          cartItems.some((x) => x.service_id === s.id) ? "bg-[#1A1A1A] text-[#D4AF37]" : "btn-gold"
                         }`}
                         data-testid={`bridal-add-${s.id}`}
                       >
-                        {sel ? <><Check size={13}/> Added</> : <><Plus size={13}/> Add</>}
+                        {cartItems.some((x) => x.service_id === s.id) ? <><Check size={13}/> In Cart</> : <><Plus size={13}/> Add to Cart</>}
                       </button>
                     </div>
                   </motion.div>
