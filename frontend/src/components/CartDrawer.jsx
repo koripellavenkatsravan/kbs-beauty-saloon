@@ -1,14 +1,33 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Trash2, ShoppingBag, ArrowRight, Sparkles, LogIn } from "lucide-react";
+import { X, Trash2, ShoppingBag, ArrowRight, Sparkles, LogIn, Plus } from "lucide-react";
 import { useCart } from "../lib/CartContext";
 import { useAuth } from "../lib/AuthContext";
 import { useNavigate } from "react-router-dom";
 
+const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
+
+// Popular add-on service names to recommend
+const ADDON_NAMES = ["D-Tan Face", "Shampoo & Conditioner", "Threading - Eyebrows", "Basic Manicure", "Basic Pedicure", "Head Massage - Coconut Oil"];
+
 const CartDrawer = () => {
-  const { items, cartOpen, setCartOpen, removeItem, subtotal, total } = useCart();
+  const { items, cartOpen, setCartOpen, removeItem, subtotal, total, addItem } = useCart();
   const { user, setAuthOpen } = useAuth();
   const navigate = useNavigate();
+  const [addOns, setAddOns] = useState([]);
+
+  useEffect(() => {
+    if (!cartOpen) return;
+    axios.get(`${API}/services`).then((r) => {
+      const suggestions = ADDON_NAMES
+        .map((n) => r.data.find((s) => s.name === n))
+        .filter(Boolean);
+      setAddOns(suggestions);
+    }).catch(() => {});
+  }, [cartOpen]);
+
+  const recommended = addOns.filter((s) => !items.some((i) => i.service_id === s.id)).slice(0, 3);
 
   const proceed = () => {
     if (!user) { setAuthOpen(true); return; }
@@ -65,9 +84,29 @@ const CartDrawer = () => {
             </div>
 
             {items.length > 0 && (
-              <div className="border-t border-[#E7DFCF] p-6 bg-white space-y-2">
-                <div className="flex justify-between text-sm text-[#3d3d3d]"><span>Subtotal</span><span>₹{subtotal.toLocaleString()}</span></div>
-                <div className="flex justify-between font-serif-kbs text-2xl pt-1 border-t border-[#E7DFCF]"><span>Total</span><span className="text-[#B7902B]">₹{total.toLocaleString()}</span></div>
+              <div className="border-t border-[#E7DFCF] dark:border-[#2a2a30] p-6 bg-white dark:bg-[#1A1A1E] space-y-3">
+                {recommended.length > 0 && (
+                  <div>
+                    <div className="text-[10px] uppercase tracking-[0.22em] text-[#8a6c1e] mb-2 inline-flex items-center gap-1">
+                      <Sparkles size={11} className="text-[#D4AF37]"/> Recommended Add-ons
+                    </div>
+                    <div className="flex flex-wrap gap-2">
+                      {recommended.map((r) => (
+                        <button
+                          key={r.id}
+                          onClick={() => addItem(r)}
+                          className="text-[11px] px-3 py-1.5 rounded-full border border-[#E7DFCF] dark:border-[#2a2a30] bg-white dark:bg-[#1A1A1E] hover:border-[#D4AF37] hover:text-[#B7902B] transition inline-flex items-center gap-1"
+                          data-testid={`addon-${r.id}`}
+                        >
+                          <Plus size={11}/> {r.name} · ₹{r.price}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                <div className="flex justify-between text-sm text-[#3d3d3d] dark:text-[#c8c8c8]"><span>Subtotal</span><span>₹{subtotal.toLocaleString()}</span></div>
+                <div className="flex justify-between font-serif-kbs text-2xl pt-1 border-t border-[#E7DFCF] dark:border-[#2a2a30]"><span>Total</span><span className="text-[#B7902B]">₹{total.toLocaleString()}</span></div>
 
                 <button onClick={proceed} className="w-full btn-gold py-3 rounded-full text-sm font-semibold inline-flex items-center justify-center gap-2 mt-3" data-testid="cart-checkout-btn">
                   {user ? <><Sparkles size={14}/> Proceed to Checkout <ArrowRight size={14}/></> : <><LogIn size={14}/> Sign In to Checkout</>}

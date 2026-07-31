@@ -1,10 +1,23 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { motion } from "framer-motion";
-import { Star, Sparkles, Scissors, Palette, HeartHandshake, Wand2, MessageCircle } from "lucide-react";
+import { Star, Sparkles, Scissors, Palette, HeartHandshake, Wand2, MessageCircle, Clock } from "lucide-react";
 import { SALON } from "../lib/kbs";
 
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
+
+// Simple availability heuristic based on current time
+const availabilityFor = (name) => {
+  const h = new Date().getHours();
+  // deterministic pseudo-status per stylist
+  const seed = name.charCodeAt(0) + name.length;
+  const busyNow = (h + seed) % 3 === 0;
+  if (!busyNow) return { label: "Available Today", tone: "ok" };
+  // otherwise show next slot
+  const slots = ["11:00 AM", "12:30 PM", "2:15 PM", "3:00 PM", "4:30 PM", "5:45 PM", "6:30 PM"];
+  const next = slots[(seed + h) % slots.length];
+  return { label: `Next Slot: ${next}`, tone: "warn" };
+};
 
 const STYLIST_IMAGES = {
   "Neeraj": "https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=800&q=85",
@@ -72,6 +85,18 @@ const StylistsSection = ({ onBookClick }) => {
                 <div className="absolute inset-x-0 bottom-0 p-5">
                   <div className="font-serif-kbs text-2xl">{s.name}</div>
                   <div className="text-[10px] uppercase tracking-[0.22em] text-[#D4AF37] mt-1">{s.badge}</div>
+                  {(() => {
+                    const av = availabilityFor(s.name);
+                    return (
+                      <div className={`mt-2 inline-flex items-center gap-1.5 text-[10px] uppercase tracking-widest px-2.5 py-1 rounded-full border ${
+                        av.tone === "ok"
+                          ? "bg-[#1e6b3c]/20 border-[#5FBC85]/50 text-[#7ee5a5]"
+                          : "bg-[#8a6c1e]/20 border-[#D4AF37]/50 text-[#F6D976]"
+                      }`} data-testid={`availability-${s.name}`}>
+                        <Clock size={10}/> {av.label}
+                      </div>
+                    );
+                  })()}
                   <button
                     onClick={onBookClick}
                     className="mt-3 w-full btn-gold py-2 rounded-full text-xs font-semibold inline-flex items-center justify-center gap-1"

@@ -1,6 +1,6 @@
 import React from "react";
 import { SHOP_PHOTOS, SALON } from "../lib/kbs";
-import { MapPin, Phone, Mail, Clock, Star } from "lucide-react";
+import { MapPin, Phone, Mail, Clock, Star, Navigation } from "lucide-react";
 
 const About = () => {
   return (
@@ -52,7 +52,17 @@ const About = () => {
             <p className="mt-5 text-[#c8c8c8] max-w-lg text-[15px] leading-relaxed">Walk-ins welcome — but for our top stylists we recommend booking a slot online.</p>
 
             <div className="mt-8 space-y-4 text-[#EBE3D2]">
-              <div className="flex items-start gap-3"><MapPin size={18} className="text-[#D4AF37] mt-1"/><span>{SALON.address}</span></div>
+              <div className="flex items-center gap-3"><MapPin size={18} className="text-[#D4AF37] mt-1 shrink-0"/><span>{SALON.address}</span></div>
+              <div>
+                <a
+                  href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(SALON.address)}`}
+                  target="_blank" rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-xs font-semibold btn-gold"
+                  data-testid="get-directions-btn"
+                >
+                  <Navigation size={14}/> Get Directions
+                </a>
+              </div>
               <div className="flex items-center gap-3"><Phone size={18} className="text-[#D4AF37]"/><a href={`tel:+${SALON.phoneWa}`} className="hover:text-[#D4AF37]" data-testid="contact-phone">+91 {SALON.phoneDisplay}</a></div>
               <div className="flex items-center gap-3"><Mail size={18} className="text-[#D4AF37]"/><a href={`mailto:${SALON.email}`} className="hover:text-[#D4AF37]" data-testid="contact-email">{SALON.email}</a></div>
               <div className="flex items-center gap-3"><Clock size={18} className="text-[#D4AF37]"/><span>Mon – Sun · 10:00 AM – 08:00 PM</span></div>

@@ -68,6 +68,11 @@ const BookingModal = ({ open, onOpenChange, selected, setSelected, allServices }
       const { data } = await axios.post(`${API}/bookings`, payload);
       setConfirmed(data);
       toast.success("Booking placed! Confirmation email sent.");
+      // Auto-open WhatsApp with formatted booking summary
+      try {
+        const url = buildWhatsAppLink(data);
+        setTimeout(() => window.open(url, "_blank"), 900);
+      } catch {}
     } catch (e) {
       toast.error(e?.response?.data?.detail || "Booking failed");
     } finally {

@@ -1,0 +1,30 @@
+{
+  "summary": "Iter 7 (theme toggle, glassmorphism, WhatsApp auto-open, availability badges, recommended add-ons, Get Directions, image swaps, loyalty removal) verified. Backend 5/5 pass — /api/orders/checkout returns ONLY {order:{...}} with the exact 14 whitelisted keys and total==subtotal (no tax/discount/loyalty fields). Manager pw 'sravan2003' works; old rejected. Admin login OK. Frontend: theme-toggle flips data-theme + persists in kbs_theme; nav has backdrop-filter blur(40px); availability badges render for 5+ stylists (data-testid=availability-{Name}); Get Directions btn href correctly points to google.com/maps/dir with encoded salon destination; cart drawer shows 3 recommended add-on chips (data-testid=addon-{id}) that ADD to cart on click and refill from the pool; drawer has NO GST/Tax/Loyalty/Discount lines; Checkout page has NO Loyalty/GST/Tax/Discount, only Subtotal+Total (equal); Place Order triggers window.open(wa.me/919494542999?...) with Order ID, customer name, service list, and total in URL-encoded text. User menu now shows 'Signed in as {name}' and 'Loyalty' text absent. Menu image tokens present in DOM: a9rwtded (Women Korean Combo swap), 5saurnjb (Women Haircut swap), mwt96e4k (trending threading), hx1b7lp1 (trending korean-combo). Men-side tokens chhcei7i & 8xh9qcwt only load when Men gender tab is active (source code in kbs.js confirms they are correctly wired to combos-m and facials-m).",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": [
+      {"screen": "First visit theme default", "issues": ["ThemeContext defaults to system preference first (prefers-color-scheme: light -> light), only falls back to dark otherwise. Spec explicitly says 'Default theme on first visit = dark'. On a headless/Playwright browser (which reports prefers-color-scheme=light by default), the site loads in LIGHT mode on a truly first visit, not the intended luxury Dark Gold. If strict spec compliance is required, remove the media-query branch and always default to dark unless localStorage has a saved 'light'."]},
+      {"screen": "CartDrawer glassmorphism", "issues": ["Drawer computed style shows backdrop-filter: none and solid background rgb(253,251,247). Nav DOES have backdrop-blur(40px), but the cart drawer body itself did not — spec calls for frosted glassmorphism on 'sticky nav / drawers / payment'. Consider adding backdrop-blur/translucent bg to the drawer aside element (likely a Sheet/aside class). Minor visual polish."]}
+    ]
+  },
+  "test_report_links": ["/app/backend/tests/test_iter7_regression.py", "/app/test_reports/pytest/iter7_results.xml"],
+  "action_items": [
+    "MINOR (optional): Remove leftover srOnly text '...loyalty points' in /app/frontend/src/components/AuthModal.jsx line 44 DialogDescription — spec asks for full loyalty removal (visual removal is complete, but this string still exists in DOM for screen readers).",
+    "MINOR (optional, spec-strictness): In ThemeContext.jsx, drop the prefers-color-scheme:light branch so the first-visit default is unconditionally dark (per '(default DARK gold aesthetic)').",
+    "MINOR (optional): Add backdrop-filter blur + translucent bg to CartDrawer aside for glassmorphism consistency with nav (currently drawer is opaque)."
+  ],
+  "critical_code_review_comments": [
+    "server.py /api/auth/register + /api/auth/login response still returns 'loyalty_points' field — acceptable per spec (backwards compat), but not used anywhere anymore; safe to drop in a future cleanup.",
+    "ThemeContext.jsx conflates 'system-preference auto-detect' with 'default dark' — both flags are set, but only one can win on first visit. Consider disambiguating in ThemeContext or spec."
+  ],
+  "updated_files": ["/app/backend/tests/test_iter7_regression.py", "/app/test_reports/iteration_7.json"],
+  "success_rate": {"backend": "100% (5/5)", "frontend": "100% on the tested items (theme toggle, add-ons, WhatsApp popup, checkout schema, availability badges, get-directions, user menu, image swaps)"},
+  "test_credentials": "Manager: sravan2003 | Admin: admin@kbs.com/kbs@admin2026 | Ad-hoc test cust created via /api/auth/register with kbs_auth_token stored in localStorage for signed-in Playwright flow.",
+  "seed_data_creation": "Registered ephemeral test users (iter7_*@example.com and iter7ui_*@example.com) via /api/auth/register; each session creates one cart+one order for the checkout WhatsApp flow.",
+  "retest_needed": false,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "Auth token localStorage key is 'kbs_auth_token' (NOT kbs_token). Theme key is 'kbs_theme'. User-menu is data-testid='navbar-user-btn' (dropdown, contains 'Signed in as ...'). Cart drawer add-on chips: data-testid='addon-{service_id}'. Checkout Place Order button: data-testid='place-order-btn'. To assert WhatsApp popup, override window.open before clicking Place Order and read window.__openedUrls — the URL is https://wa.me/919494542999?text=<encoded>. Manager password moved to 'sravan2003' in .env (SALON_WHATSAPP=919494542999).",
+  "rca of the issue": "N/A — this iteration is a feature-verification pass, not a bug hunt. All primary spec items pass; only 2 minor design polish gaps (theme first-visit default + drawer glassmorphism) and one leftover 'loyalty points' srOnly string were noted."
+}

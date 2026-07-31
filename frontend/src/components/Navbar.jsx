@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { LOGO_URL, SALON } from "../lib/kbs";
-import { Phone, ShoppingBag, User as UserIcon, LogOut, LayoutDashboard } from "lucide-react";
+import { Phone, ShoppingBag, User as UserIcon, LogOut, LayoutDashboard, Sun, Moon } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../lib/AuthContext";
 import { useCart } from "../lib/CartContext";
+import { useTheme } from "../lib/ThemeContext";
 
 const Navbar = ({ onBookClick, onMenuClick }) => {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const { user, setAuthOpen, logout } = useAuth();
   const { items, setCartOpen } = useCart();
+  const { theme, toggle: toggleTheme } = useTheme();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
@@ -20,8 +22,8 @@ const Navbar = ({ onBookClick, onMenuClick }) => {
   return (
     <header
       className={`sticky top-0 z-40 transition-all duration-300 ${
-        scrolled ? "backdrop-blur-2xl bg-[#FDFBF7]/80 border-b border-[#E7DFCF] shadow-[0_10px_30px_-20px_rgba(26,26,26,0.25)]"
-                 : "backdrop-blur-md bg-[#FDFBF7]/50 border-b border-transparent"
+        scrolled ? "backdrop-blur-2xl bg-[#FDFBF7]/80 dark:bg-[#0F0F11]/80 border-b border-[#E7DFCF] dark:border-[#2a2a30] shadow-[0_10px_30px_-20px_rgba(26,26,26,0.25)]"
+                 : "backdrop-blur-md bg-[#FDFBF7]/50 dark:bg-[#0F0F11]/50 border-b border-transparent"
       }`}
     >
       <div className="max-w-7xl mx-auto px-5 sm:px-10 h-24 flex items-center justify-between gap-4">
@@ -31,12 +33,12 @@ const Navbar = ({ onBookClick, onMenuClick }) => {
             <img src={LOGO_URL} alt="KBS" className="relative h-16 w-16 object-contain drop-shadow-[0_2px_10px_rgba(212,175,55,0.55)] transition-transform duration-500 group-hover:scale-105"/>
           </div>
           <div className="leading-tight hidden sm:block">
-            <div className="font-serif-kbs text-[22px] tracking-tight text-[#1A1A1A]">KBS Beauty Saloon</div>
+            <div className="font-serif-kbs text-[22px] tracking-tight text-[#1A1A1A] dark:text-[#FDFBF7]">KBS Beauty Saloon</div>
             <div className="text-[10px] tracking-[0.30em] text-[#B7902B] uppercase">Luxury · Wellness</div>
           </div>
         </a>
 
-        <nav className="hidden lg:flex items-center gap-7 text-sm">
+        <nav className="hidden lg:flex items-center gap-7 text-sm text-[#1A1A1A] dark:text-[#E5E5E5]">
           <a href="#menu" onClick={onMenuClick} className="hover:text-[#B7902B] transition-colors" data-testid="nav-menu">Menu</a>
           <a href="#stylists" className="hover:text-[#B7902B] transition-colors" data-testid="nav-stylists">Stylists</a>
           <a href="#bridal" className="hover:text-[#B7902B] transition-colors" data-testid="nav-bridal">Bridal & Groom</a>
@@ -50,11 +52,15 @@ const Navbar = ({ onBookClick, onMenuClick }) => {
             <Phone size={14} className="text-[#B7902B]"/> {SALON.phoneDisplay}
           </a>
 
-          <button onClick={() => setCartOpen(true)} className="relative h-10 w-10 rounded-full border border-[#E7DFCF] bg-white grid place-items-center hover:border-[#D4AF37] transition" data-testid="navbar-cart-btn">
-            <ShoppingBag size={16} className="text-[#1A1A1A]"/>
+          <button onClick={() => setCartOpen(true)} className="relative h-10 w-10 rounded-full border border-[#E7DFCF] dark:border-[#2a2a30] bg-white dark:bg-[#1A1A1E] grid place-items-center hover:border-[#D4AF37] transition" data-testid="navbar-cart-btn">
+            <ShoppingBag size={16} className="text-[#1A1A1A] dark:text-[#FDFBF7]"/>
             {items.length > 0 && (
               <span className="absolute -top-1.5 -right-1.5 h-5 w-5 rounded-full bg-[#D4AF37] text-[#1A1A1A] text-[10px] font-bold grid place-items-center">{items.length}</span>
             )}
+          </button>
+
+          <button onClick={toggleTheme} className="h-10 w-10 rounded-full border border-[#E7DFCF] dark:border-[#2a2a30] bg-white dark:bg-[#1A1A1E] grid place-items-center hover:border-[#D4AF37] transition" data-testid="theme-toggle" aria-label="Toggle theme">
+            {theme === "dark" ? <Sun size={15} className="text-[#D4AF37]"/> : <Moon size={15} className="text-[#B7902B]"/>}
           </button>
 
           {user ? (
@@ -64,14 +70,14 @@ const Navbar = ({ onBookClick, onMenuClick }) => {
                 <span className="text-xs font-medium hidden sm:inline">{user.name?.split(" ")[0]}</span>
               </button>
               {menuOpen && (
-                <div className="absolute right-0 mt-2 w-56 rounded-2xl border border-[#E7DFCF] bg-white shadow-xl overflow-hidden" onMouseLeave={() => setMenuOpen(false)}>
-                  <div className="px-4 py-3 border-b border-[#E7DFCF]">
-                    <div className="text-xs text-[#6b6b6b]">Loyalty Points</div>
-                    <div className="font-serif-kbs text-2xl text-[#B7902B]">{user.loyalty_points || 0}</div>
+                <div className="absolute right-0 mt-2 w-56 rounded-2xl border border-[#E7DFCF] dark:border-[#2a2a30] bg-white dark:bg-[#1A1A1E] shadow-xl overflow-hidden" onMouseLeave={() => setMenuOpen(false)}>
+                  <div className="px-4 py-3 border-b border-[#E7DFCF] dark:border-[#2a2a30]">
+                    <div className="text-xs text-[#6b6b6b] dark:text-[#c8c8c8]">Signed in as</div>
+                    <div className="font-serif-kbs text-lg text-[#1A1A1A] dark:text-[#FDFBF7]">{user.name}</div>
                   </div>
-                  <Link to="/profile" className="block px-4 py-2.5 text-sm hover:bg-[#F6EFE2] inline-flex items-center gap-2 w-full" data-testid="menu-profile"><UserIcon size={14}/> My Profile</Link>
-                  <Link to="/admin" className="block px-4 py-2.5 text-sm hover:bg-[#F6EFE2] inline-flex items-center gap-2 w-full" data-testid="menu-admin"><LayoutDashboard size={14}/> Manager Dashboard</Link>
-                  <button onClick={() => { logout(); setMenuOpen(false); }} className="w-full text-left px-4 py-2.5 text-sm hover:bg-[#F6EFE2] inline-flex items-center gap-2 text-[#7a2b2b]" data-testid="menu-logout"><LogOut size={14}/> Sign Out</button>
+                  <Link to="/profile" className="block px-4 py-2.5 text-sm hover:bg-[#F6EFE2] dark:hover:bg-[#2a2a30] dark:text-[#FDFBF7] inline-flex items-center gap-2 w-full" data-testid="menu-profile"><UserIcon size={14}/> My Profile</Link>
+                  <Link to="/admin" className="block px-4 py-2.5 text-sm hover:bg-[#F6EFE2] dark:hover:bg-[#2a2a30] dark:text-[#FDFBF7] inline-flex items-center gap-2 w-full" data-testid="menu-admin"><LayoutDashboard size={14}/> Manager Dashboard</Link>
+                  <button onClick={() => { logout(); setMenuOpen(false); }} className="w-full text-left px-4 py-2.5 text-sm hover:bg-[#F6EFE2] dark:hover:bg-[#2a2a30] inline-flex items-center gap-2 text-[#7a2b2b]" data-testid="menu-logout"><LogOut size={14}/> Sign Out</button>
                 </div>
               )}
             </div>

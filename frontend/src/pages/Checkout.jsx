@@ -40,9 +40,13 @@ const Checkout = () => {
     try {
       const { data } = await axios.post(`${API}/orders/checkout`, { stylist: "Any Available", notes: "" }, auth);
       setOrder(data.order);
-      await refreshMe();
       await clear();
-      toast.success(`Order placed! +${data.loyalty_rewarded} loyalty points on payment`);
+      toast.success("Order placed! Opening WhatsApp to confirm…");
+      // Auto-open pre-formatted WhatsApp message
+      const svcList = data.order.items.map((i) => `• ${i.name} — ₹${i.price}`).join("\n");
+      const msg = `Hi KBS Beauty Saloon!\n\nOrder ID: ${data.order.id.slice(0,8).toUpperCase()}\nName: ${data.order.name}\nEmail: ${data.order.email}\n\nServices:\n${svcList}\n\nTotal: ₹${data.order.total}\nPayment: UPI to ${SALON.bank.upi} (please confirm)`;
+      const url = `https://wa.me/${SALON.phoneWa}?text=${encodeURIComponent(msg)}`;
+      setTimeout(() => window.open(url, "_blank"), 1200);
     } catch (e) {
       toast.error(e?.response?.data?.detail || "Checkout failed");
     } finally { setPlacing(false); }
@@ -66,9 +70,7 @@ const Checkout = () => {
   )}` : "#";
 
   const subtotal = items.reduce((s, x) => s + (x.price || 0), 0);
-  const points = user?.loyalty_points || 0;
-  const discount = order ? order.discount : Math.min(points, Math.floor(subtotal / 2));
-  const total = subtotal - discount;
+  const total = subtotal;
   const qrUrl = order ? `${API}/orders/${order.id}/qr` : null;
 
   return (
@@ -102,20 +104,10 @@ const Checkout = () => {
 
             <div className="mt-4 space-y-1.5 text-sm">
               <div className="flex justify-between"><span>Subtotal</span><span>₹{(order ? order.subtotal : subtotal).toLocaleString()}</span></div>
-              {discount > 0 && (
-                <div className="flex justify-between text-[#1e6b3c]"><span>Loyalty Discount</span><span>− ₹{discount.toLocaleString()}</span></div>
-              )}
               <div className="flex justify-between font-serif-kbs text-2xl pt-2 border-t border-[#E7DFCF] mt-2">
                 <span>Total</span><span className="text-[#B7902B]">₹{(order ? order.total : total).toLocaleString()}</span>
               </div>
             </div>
-
-            {points > 0 && !order && (
-              <div className="mt-4 rounded-2xl bg-[#FBF3E6] border border-[#EFDCA0] p-4">
-                <div className="text-[10px] uppercase tracking-[0.24em] text-[#8a6c1e]">Loyalty</div>
-                <div className="text-sm text-[#1A1A1A] mt-1">You have <b>{points} points</b> — ₹{discount} auto-applied.</div>
-              </div>
-            )}
 
             {!order ? (
               <button onClick={placeOrder} disabled={placing || items.length === 0} className="mt-6 w-full btn-gold py-3 rounded-full text-sm font-semibold inline-flex items-center justify-center gap-2 disabled:opacity-60" data-testid="place-order-btn">

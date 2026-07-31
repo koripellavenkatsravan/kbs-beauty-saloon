@@ -10,25 +10,28 @@ import AuthModal from "./components/AuthModal";
 import CartDrawer from "./components/CartDrawer";
 import { AuthProvider } from "./lib/AuthContext";
 import { CartProvider } from "./lib/CartContext";
+import { ThemeProvider } from "./lib/ThemeContext";
 
 function App() {
   return (
     <div className="App">
       <Toaster position="top-right" richColors />
       <BrowserRouter>
-        <AuthProvider>
-          <CartProvider>
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/admin" element={<Admin />} />
-              <Route path="/checkout" element={<Checkout />} />
-              <Route path="/profile" element={<Profile />} />
-              <Route path="/auth/callback" element={<AuthCallback />} />
-            </Routes>
-            <AuthModal />
-            <CartDrawer />
-          </CartProvider>
-        </AuthProvider>
+        <ThemeProvider>
+          <AuthProvider>
+            <CartProvider>
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/admin" element={<Admin />} />
+                <Route path="/checkout" element={<Checkout />} />
+                <Route path="/profile" element={<Profile />} />
+                <Route path="/auth/callback" element={<AuthCallback />} />
+              </Routes>
+              <AuthModal />
+              <CartDrawer />
+            </CartProvider>
+          </AuthProvider>
+        </ThemeProvider>
       </BrowserRouter>
     </div>
   );

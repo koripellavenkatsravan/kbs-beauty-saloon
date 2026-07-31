@@ -19,7 +19,7 @@ const TRENDING = [
     tagline: "Queen of arches — precise & painless",
     filterName: "Threading",
     gradient: "from-[#7a4757] to-[#c89aa9]",
-    image: "https://customer-assets-v7afamib.emergentagent.net/job_elegant-salon-app/artifacts/hx1b7lp1_image.png",
+    image: "https://customer-assets-v7afamib.emergentagent.net/job_elegant-salon-app/artifacts/mwt96e4k_image.png",
   },
   {
     key: "hair-spa",
@@ -37,7 +37,7 @@ const TRENDING = [
     tagline: "Spa + Pedicure + Facial · ₹10,000",
     filterName: "Korean Combo",
     gradient: "from-[#1A1A1A] to-[#5a4a1a]",
-    image: "https://customer-assets-v7afamib.emergentagent.net/job_elegant-salon-app/artifacts/mwt96e4k_image.png",
+    image: "https://customer-assets-v7afamib.emergentagent.net/job_elegant-salon-app/artifacts/hx1b7lp1_image.png",
   },
 ];
 

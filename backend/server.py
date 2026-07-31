@@ -435,10 +435,7 @@ async def orders_checkout(payload: OrderCreate, user: dict = Depends(get_current
     if not items:
         raise HTTPException(status_code=400, detail="Cart is empty")
     subtotal = sum(int(i.get("price", 0)) for i in items)
-    # Loyalty: 100 points = ₹100 discount, don't allow more than 50% of subtotal
-    points = int(user.get("loyalty_points", 0) or 0)
-    discount = min(points, subtotal // 2)
-    total = subtotal - discount
+    total = subtotal
     order = {
         "id": str(uuid.uuid4()),
         "user_id": user["id"],
@@ -446,7 +443,6 @@ async def orders_checkout(payload: OrderCreate, user: dict = Depends(get_current
         "name": user["name"],
         "items": items,
         "subtotal": subtotal,
-        "discount": discount,
         "total": total,
         "stylist": payload.stylist or "Any Available",
         "date": payload.date,
@@ -457,14 +453,9 @@ async def orders_checkout(payload: OrderCreate, user: dict = Depends(get_current
         "created_at": datetime.now(timezone.utc).isoformat(),
     }
     await db.orders.insert_one(order)
-    # Deduct loyalty used, then reward new points on this order (1 pt / ₹100)
-    reward = total // 100
-    new_points = points - discount + reward
-    await db.users.update_one({"id": user["id"]}, {"$set": {"loyalty_points": new_points}})
     await db.carts.update_one({"user_id": user["id"]}, {"$set": {"items": []}})
-    order["_id"] = None
     order.pop("_id", None)
-    return {"order": order, "loyalty_points": new_points, "loyalty_rewarded": reward}
+    return {"order": order}
 
 
 @api_router.get("/orders/{order_id}")

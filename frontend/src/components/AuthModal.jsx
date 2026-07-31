@@ -50,9 +50,7 @@ const AuthModal = () => {
             </button>
             <div className="text-[10px] tracking-[0.28em] uppercase text-[#D4AF37]">Members Club</div>
             <div className="font-serif-kbs text-3xl text-[#FDFBF7] mt-1.5">{mode === "login" ? "Welcome back." : "Join KBS."}</div>
-            <div className="text-xs text-[#c8c8c8] mt-1">
-              Track bookings · Earn 1 point per ₹100 · 100 points = ₹100 off
-            </div>
+            <div className="text-xs text-[#c8c8c8] mt-1">Track bookings · Save favourites · One-tap re-book</div>
           </div>
 
           <div className="p-6 bg-white">
