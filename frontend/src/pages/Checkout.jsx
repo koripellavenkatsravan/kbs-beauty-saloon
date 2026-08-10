@@ -8,20 +8,28 @@ import Navbar from "../components/Navbar";
 import { useAuth } from "../lib/AuthContext";
 import { useCart } from "../lib/CartContext";
 import { SALON } from "../lib/kbs";
+import { useMagnetic } from "../lib/useMagnetic";
 
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
 
 const PAY_APPS = [
-  { name: "PhonePe", color: "#5F259F", letter: "P" },
-  { name: "Google Pay", color: "#1A73E8", letter: "G" },
-  { name: "Paytm", color: "#00BAF2", letter: "Pt" },
-  { name: "CRED", color: "#1A1A1A", letter: "C" },
+  { name: "PhonePe", scheme: "phonepe", color: "#5F259F", letter: "P" },
+  { name: "Google Pay", scheme: "tez", color: "#1A73E8", letter: "G" },
+  { name: "Paytm", scheme: "paytmmp", color: "#00BAF2", letter: "Pt" },
+  { name: "BHIM / CRED", scheme: "upi", color: "#1A1A1A", letter: "U" },
 ];
+
+const buildUpiLink = (scheme, upiId, name, amount, note) => {
+  const params = `pa=${encodeURIComponent(upiId)}&pn=${encodeURIComponent(name)}&am=${amount}&cu=INR&tn=${encodeURIComponent(note)}`;
+  if (scheme === "upi") return `upi://pay?${params}`;
+  return `${scheme}://upi/pay?${params}`;
+};
 
 const Checkout = () => {
   const { user, auth, setAuthOpen, refreshMe, loading } = useAuth();
   const { items, clear } = useCart();
   const navigate = useNavigate();
+  const magneticPay = useMagnetic(0.12, 60);
   const [order, setOrder] = useState(null);
   const [payInfo, setPayInfo] = useState(null);
   const [placing, setPlacing] = useState(false);
@@ -74,7 +82,7 @@ const Checkout = () => {
   const qrUrl = order ? `${API}/orders/${order.id}/qr` : null;
 
   return (
-    <div className="min-h-screen bg-[#FDFBF7]">
+    <div className="min-h-screen bg-[#FDFBF7] dark:bg-[#0F0F11] text-[#1A1A1A] dark:text-[#FDFBF7]">
       <Navbar onBookClick={() => {}} onMenuClick={() => navigate("/#menu")} />
       <div className="max-w-6xl mx-auto px-5 sm:px-10 py-10">
         <Link to="/" className="inline-flex items-center gap-1 text-sm text-[#8a6c1e] hover:text-[#B7902B]" data-testid="checkout-back">
@@ -110,7 +118,7 @@ const Checkout = () => {
             </div>
 
             {!order ? (
-              <button onClick={placeOrder} disabled={placing || items.length === 0} className="mt-6 w-full btn-gold py-3 rounded-full text-sm font-semibold inline-flex items-center justify-center gap-2 disabled:opacity-60" data-testid="place-order-btn">
+              <button ref={magneticPay} onClick={placeOrder} disabled={placing || items.length === 0} className="mt-6 w-full btn-gold py-3 rounded-full text-sm font-semibold inline-flex items-center justify-center gap-2 disabled:opacity-60" data-testid="place-order-btn" data-magnetic>
                 <Sparkles size={14}/> {placing ? "Placing…" : "Place Order & Show UPI QR"}
               </button>
             ) : (
@@ -140,14 +148,25 @@ const Checkout = () => {
                   <div className="font-serif-kbs text-4xl mt-2 text-[#B7902B]">₹{order.total.toLocaleString()}</div>
                 </div>
 
-                {/* Payment app badges */}
-                <div className="mt-6 flex items-center justify-center gap-3 flex-wrap" data-testid="pay-apps">
-                  {PAY_APPS.map((a) => (
-                    <div key={a.name} className="flex items-center gap-2 px-3 py-2 rounded-full bg-white border border-[#E7DFCF] shadow-sm">
-                      <div className="h-7 w-7 rounded-full grid place-items-center text-[11px] font-bold text-white" style={{ background: a.color }}>{a.letter}</div>
-                      <span className="text-xs font-medium text-[#1A1A1A]">{a.name}</span>
-                    </div>
-                  ))}
+                {/* Payment app deep-link buttons */}
+                <div className="mt-6 grid grid-cols-2 sm:grid-cols-4 gap-2" data-testid="pay-apps">
+                  {PAY_APPS.map((a) => {
+                    const link = buildUpiLink(a.scheme, SALON.bank.upi, "KBS Beauty Saloon", order.total, `KBS-${order.id.slice(0,8)}`);
+                    return (
+                      <a
+                        key={a.name}
+                        href={link}
+                        className="flex flex-col items-center gap-2 px-3 py-4 rounded-2xl bg-white dark:bg-[#1A1A1E] border border-[#E7DFCF] dark:border-[#2a2a30] hover:border-[#D4AF37] hover:shadow-[0_10px_24px_-10px_rgba(212,175,55,0.6)] transition-all active:scale-95 hover:scale-[1.03]"
+                        data-testid={`pay-app-${a.scheme}`}
+                      >
+                        <div className="h-9 w-9 rounded-full grid place-items-center text-[13px] font-bold text-white" style={{ background: a.color }}>{a.letter}</div>
+                        <span className="text-[11px] font-medium text-[#1A1A1A] dark:text-[#FDFBF7]">{a.name}</span>
+                      </a>
+                    );
+                  })}
+                </div>
+                <div className="mt-3 text-center text-[11px] text-[#8a6c1e]">
+                  Tap a button on mobile · Amount pre-filled to ₹{order.total.toLocaleString()}
                 </div>
               </>
             )}

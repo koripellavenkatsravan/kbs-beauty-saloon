@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
+import { motion } from "framer-motion";
 import { LOGO_URL, SALON } from "../lib/kbs";
 import { Phone, ShoppingBag, User as UserIcon, LogOut, LayoutDashboard, Sun, Moon } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../lib/AuthContext";
 import { useCart } from "../lib/CartContext";
 import { useTheme } from "../lib/ThemeContext";
+import { useMagnetic } from "../lib/useMagnetic";
 
 const Navbar = ({ onBookClick, onMenuClick }) => {
   const [scrolled, setScrolled] = useState(false);
@@ -12,6 +14,7 @@ const Navbar = ({ onBookClick, onMenuClick }) => {
   const { user, setAuthOpen, logout } = useAuth();
   const { items, setCartOpen } = useCart();
   const { theme, toggle: toggleTheme } = useTheme();
+  const magneticBook = useMagnetic(0.28, 100);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
@@ -28,10 +31,18 @@ const Navbar = ({ onBookClick, onMenuClick }) => {
     >
       <div className="max-w-7xl mx-auto px-5 sm:px-10 h-24 flex items-center justify-between gap-4">
         <a href="/" className="flex items-center gap-4 group shrink-0" data-testid="navbar-logo">
-          <div className="relative">
-            <div className="absolute -inset-1 rounded-full bg-[#D4AF37]/30 blur-lg opacity-70 group-hover:opacity-100 transition-opacity"/>
-            <img src={LOGO_URL} alt="KBS" className="relative h-16 w-16 object-contain drop-shadow-[0_2px_10px_rgba(212,175,55,0.55)] transition-transform duration-500 group-hover:scale-105"/>
-          </div>
+          <motion.div
+            className="relative"
+            whileHover={{ scale: 1.08, rotate: -4 }}
+            transition={{ type: "spring", stiffness: 320, damping: 14 }}
+          >
+            <motion.div
+              className="absolute -inset-1 rounded-full bg-[#D4AF37]/40 blur-lg"
+              animate={{ opacity: [0.35, 0.75, 0.35], scale: [1, 1.08, 1] }}
+              transition={{ duration: 2.6, repeat: Infinity, ease: "easeInOut" }}
+            />
+            <img src={LOGO_URL} alt="KBS" className="relative h-16 w-16 object-contain drop-shadow-[0_2px_10px_rgba(212,175,55,0.55)]"/>
+          </motion.div>
           <div className="leading-tight hidden sm:block">
             <div className="font-serif-kbs text-[22px] tracking-tight text-[#1A1A1A] dark:text-[#FDFBF7]">KBS Beauty Saloon</div>
             <div className="text-[10px] tracking-[0.30em] text-[#B7902B] uppercase">Luxury · Wellness</div>
@@ -85,7 +96,7 @@ const Navbar = ({ onBookClick, onMenuClick }) => {
             <button onClick={() => setAuthOpen(true)} className="btn-outline-gold px-4 py-2 rounded-full text-xs font-medium hidden sm:inline-flex" data-testid="navbar-signin-btn">Sign In / Sign Up</button>
           )}
 
-          <button onClick={onBookClick} className="btn-gold px-5 py-2.5 rounded-full text-sm font-medium" data-testid="navbar-book-btn">
+          <button ref={magneticBook} onClick={onBookClick} className="btn-gold px-5 py-2.5 rounded-full text-sm font-medium" data-testid="navbar-book-btn" data-magnetic>
             Book Now
           </button>
         </div>

@@ -203,6 +203,62 @@ body {
 /* Smooth theme transition */
 html, body, .kbs-card, .kbs-glass-light, .kbs-dark-panel, .btn-onyx, .btn-outline-gold {
   transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+
+/* ============================================================
+   DARK MODE AUDIT — global overrides for hardcoded surfaces
+   These map every "bg-white / bg-[#FDFBF7] / text-[#1A1A1A]" style
+   used across cards, modals, inputs, admin — to their dark twins.
+   Placed at the END so they win over Tailwind utility ordering.
+   ============================================================ */
+
+[data-theme="dark"] .bg-white { background-color: #1A1A1E !important; }
+[data-theme="dark"] .bg-\[\#FDFBF7\] { background-color: #0F0F11 !important; }
+[data-theme="dark"] .bg-\[\#F6EFE2\] { background-color: #232328 !important; }
+[data-theme="dark"] .bg-\[\#FBF3E6\] { background-color: #201d1a !important; color: #F6D976 !important; }
+
+[data-theme="dark"] .text-\[\#1A1A1A\] { color: #FDFBF7 !important; }
+[data-theme="dark"] .text-\[\#3d3d3d\] { color: #c8c8c8 !important; }
+[data-theme="dark"] .text-\[\#6b6b6b\] { color: #a8a8a8 !important; }
+
+[data-theme="dark"] .border-\[\#E7DFCF\] { border-color: #2a2a30 !important; }
+[data-theme="dark"] .border-\[\#EFE4D6\] { border-color: #26262c !important; }
+[data-theme="dark"] .border-\[\#EFDCA0\] { border-color: rgba(212,175,55,0.35) !important; }
+
+/* Radix dialog body defaults */
+[data-theme="dark"] [role="dialog"] { color: #FDFBF7; }
+
+/* Inputs adapt to dark surface */
+[data-theme="dark"] input,
+[data-theme="dark"] textarea,
+[data-theme="dark"] select {
+  background-color: #1A1A1E !important;
+  color: #FDFBF7 !important;
+  border-color: #2a2a30 !important;
+}
+[data-theme="dark"] input::placeholder,
+[data-theme="dark"] textarea::placeholder { color: #7a7a7a !important; }
+
+/* Calendar (react-day-picker) */
+[data-theme="dark"] .rdp,
+[data-theme="dark"] .rdp-months { color: #FDFBF7; }
+[data-theme="dark"] .rdp-day:hover:not([disabled]) { background-color: rgba(212,175,55,0.15); }
+[data-theme="dark"] .rdp-day_selected,
+[data-theme="dark"] .rdp-day_selected:focus,
+[data-theme="dark"] .rdp-day_selected:hover { background-color: #D4AF37 !important; color: #1A1A1A !important; }
+
+/* Green / red status chip contrast in dark mode */
+[data-theme="dark"] .bg-\[\#D6EEE0\] { background-color: rgba(30,107,60,0.25) !important; }
+[data-theme="dark"] .text-\[\#1e6b3c\] { color: #7ee5a5 !important; }
+[data-theme="dark"] .bg-\[\#F5D6D6\] { background-color: rgba(122,43,43,0.25) !important; }
+[data-theme="dark"] .text-\[\#7a2b2b\] { color: #ffb1b1 !important; }
+[data-theme="dark"] .bg-\[\#DCE4F0\] { background-color: rgba(38,68,103,0.25) !important; }
+[data-theme="dark"] .text-\[\#264467\] { color: #a4bfe4 !important; }
+[data-theme="dark"] .bg-\[\#FDECC8\] { background-color: rgba(138,108,30,0.25) !important; }
+
+/* Hide any leftover subtle white bg strips in the admin table */
+[data-theme="dark"] .kbs-glass-light input,
+[data-theme="dark"] .kbs-card input { background-color: transparent !important; }
+
 }
 
 
@@ -235,3 +291,83 @@ html, body, .kbs-card, .kbs-glass-light, .kbs-dark-panel, .btn-onyx, .btn-outlin
   * { @apply border-border; }
   body { @apply bg-background text-foreground; }
 }
+
+/* ============================================================
+   DARK MODE — TARGETED PATCHES for shadcn Portalled Dialogs
+   These have higher specificity than the initial audit block
+   and target BookingModal, AuthModal, Admin dashboard KPI + tabs.
+   ============================================================ */
+
+/* Dialog panels (Radix portal-mounted) */
+[data-theme="dark"] [role="dialog"] .kbs-glass-light,
+[data-theme="dark"] [role="dialog"] .bg-white {
+  background: #1A1A1E !important;
+  color: #FDFBF7 !important;
+}
+[data-theme="dark"] [role="dialog"] * {
+  color-scheme: dark;
+}
+[data-theme="dark"] [role="dialog"] .text-\[\#1A1A1A\],
+[data-theme="dark"] [role="dialog"] .text-\[\#3d3d3d\] {
+  color: #FDFBF7 !important;
+}
+[data-theme="dark"] [role="dialog"] .border-\[\#E7DFCF\],
+[data-theme="dark"] [role="dialog"] .border-\[\#EFE4D6\] {
+  border-color: #2a2a30 !important;
+}
+[data-theme="dark"] [role="dialog"] .bg-\[\#F6EFE2\] {
+  background: #232328 !important;
+}
+
+/* Admin dashboard KPI cards + filter tabs */
+[data-theme="dark"] .kbs-card .font-serif-kbs.text-4xl {
+  color: #FDFBF7 !important;
+}
+[data-theme="dark"] .kbs-card .font-serif-kbs {
+  color: #FDFBF7 !important;
+}
+[data-theme="dark"] button.rounded-full.bg-white {
+  background: #1A1A1E !important;
+  color: #FDFBF7 !important;
+}
+
+/* Ensure ANY hardcoded text color inside a card is inverted */
+[data-theme="dark"] .kbs-card .text-\[\#1A1A1A\] { color: #FDFBF7 !important; }
+[data-theme="dark"] .kbs-card .text-\[\#3d3d3d\] { color: #c8c8c8 !important; }
+[data-theme="dark"] .kbs-card .text-\[\#6b6b6b\] { color: #a8a8a8 !important; }
+
+/* UPI-ID block in checkout — match dark surface */
+[data-theme="dark"] [data-testid="upi-id-block"] {
+  background: #201d1a !important;
+  border-color: rgba(212,175,55,0.35) !important;
+}
+[data-theme="dark"] [data-testid="upi-id-block"] .font-mono {
+  color: #F6D976 !important;
+}
+
+/* Menu accordion cards */
+[data-theme="dark"] [data-state="open"] > .bg-white,
+[data-theme="dark"] .bg-\[\#FDFBF7\] .bg-white {
+  background: #1A1A1E !important;
+}
+
+/* Any "text-white on bg-white" fallback */
+[data-theme="dark"] .bg-white { color: #FDFBF7 !important; }
+
+/* Explicit tab pill states */
+[data-theme="dark"] .kbs-card button[class*="rounded-full"]:not([class*="bg-[#1A1A1A]"]):not([class*="btn-gold"]) {
+  color: #FDFBF7 !important;
+}
+
+/* Low-priority polish from iter_11 */
+[data-theme="dark"] .kbs-card [class*="rounded-full"][class*="bg-[#D6EEE0]"] {
+  background: rgba(30,107,60,0.35) !important; border-color: rgba(95,188,133,0.55) !important; color: #b5f0cf !important;
+}
+[data-theme="dark"] .kbs-card [class*="rounded-full"][class*="bg-[#DCE4F0]"] {
+  background: rgba(38,68,103,0.35) !important; border-color: rgba(123,153,196,0.55) !important; color: #c8d7ec !important;
+}
+[data-theme="dark"] .kbs-card [class*="rounded-full"][class*="bg-[#F5D6D6]"] {
+  background: rgba(122,43,43,0.35) !important; border-color: rgba(198,123,123,0.55) !important; color: #ffb1b1 !important;
+}
+/* Checkout hero heading contrast */
+[data-theme="dark"] h1.font-serif-kbs { color: #FDFBF7 !important; }

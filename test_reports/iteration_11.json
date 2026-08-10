@@ -1,0 +1,35 @@
+{
+  "summary": "Retest of iteration_10 dark-mode HIGH bugs after E1 applied targeted CSS overrides in index.css + magnetic clamping in Checkout.jsx. ALL 3 HIGH-priority bugs are FIXED and the MEDIUM UPI-ID block issue is also resolved. Magnetic Place Order amplitude is now safe. No regressions detected on UPI deep links / cursor follower / magnetic Book Now.",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": [
+      {"screen": "/admin bookings list (dark mode)", "issues": ["Row action pill buttons 'Confirm / Mark Done / Cancel' render with very low contrast (pale-on-pale) — not in scope of this retest but noticed while validating filter tabs. Consider follow-up styling pass."]}
+    ]
+  },
+  "verified_working": [
+    "DARK MODE — BookingModal: [role='dialog'] panel bg is dark (kbs-glass-light applied), title 'Book Appointment at KBS Beauty Saloon' color rgb(255,255,255), step labels (Services/Stylist/Date & Time/Details/Confirm) color rgb(253,251,247), 'Running Total' + close (X) all readable. Screenshot confirms fully dark panel with gold accents.",
+    "DARK MODE — AuthModal: [role='dialog'] panel dark, 'Welcome back.' + tab labels visible, email/password inputs have transparent bg (inherits dark), placeholder 'you@email.com' + 'At least 6 characters' readable. Sign In gold CTA + Google button both correct.",
+    "DARK MODE — /admin KPI counters (Total Bookings 12 / Pending 10 / Confirmed 2 / Completed 0): computed color rgb(253,251,247) on parent card bg rgb(26,26,30) — VISIBLE. Fix confirmed: [data-theme='dark'] .kbs-card .font-serif-kbs override wins over inline text-[#1A1A1A].",
+    "DARK MODE — /admin filter tabs (Pending/Confirmed/Completed/Cancelled): color rgb(253,251,247) on bg rgb(26,26,30) — VISIBLE. Fix confirmed: button.rounded-full.bg-white override applied.",
+    "DARK MODE — /checkout UPI-ID block [data-testid='upi-id-block']: bg rgb(32,29,26) (dark), text rgb(255,255,255) — matches surrounding dark surface. No more cream island.",
+    "REGRESSION — Magnetic Place Order clamped: [data-testid='place-order-btn'] (474px wide, data-magnetic=true) transform after hover = matrix(1,0,0,1,-2.4,0.3678) — offset < 3px, button no longer slides off-screen. useMagnetic(0.12, 60) working as intended.",
+    "REGRESSION — Cursor follower dot + ring both present on desktop viewport.",
+    "REGRESSION — Magnetic Book Now still nudges (navbar-book-btn magnetic ref intact)."
+  ],
+  "test_report_links": [],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "Admin bookings row action buttons (Confirm/Mark Done/Cancel) have poor contrast in dark mode — pale pastel text on very light pill bg. Not in this retest's scope but worth a follow-up dark-mode invert entry.",
+    "The heading 'Complete your order.' on /checkout uses a very dim off-white with low contrast against the black page background — could be lifted for readability."
+  ],
+  "updated_files": [],
+  "success_rate": {"backend": "n/a (not tested)", "frontend": "100% for the 3 HIGH + 1 MEDIUM bugs + magnetic clamp regression — all PASS"},
+  "test_credentials": "Ephemeral customer registered: TEST_dark_<ts>@kbs.com / test1234. Manager token 'sravan2003' verified for /admin.",
+  "seed_data_creation": "Registered one ephemeral test user (TEST_dark_1786343735@kbs.com). No orders/bookings created this iteration.",
+  "retest_needed": false,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "Iteration_11 confirms all iteration_10 dark-mode HIGH bugs are fixed. If future dark-mode work is done, the two remaining low-priority observations are: (1) /admin booking-row action pill buttons (Confirm/Mark Done/Cancel) — pale-on-pale; (2) /checkout 'Complete your order.' hero heading contrast. Both are DESIGN polish not functional blockers.",
+  "rca of the issue": "Root cause was previously identified in iteration_10: shadcn DialogContent portals outside the app tree so the .bg-white utility override wasn't hitting the correct specificity, and admin KPI/filter classes used inline hex colors ([#1A1A1A], bg-white) that lost cascade. Fix strategy: add explicit [data-theme='dark'] [role='dialog'] + [data-theme='dark'] .kbs-card .font-serif-kbs + button.rounded-full.bg-white targeted rules with !important. All confirmed working via computed-style inspection."
+}

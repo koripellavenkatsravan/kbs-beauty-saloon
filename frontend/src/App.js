@@ -11,6 +11,7 @@ import CartDrawer from "./components/CartDrawer";
 import { AuthProvider } from "./lib/AuthContext";
 import { CartProvider } from "./lib/CartContext";
 import { ThemeProvider } from "./lib/ThemeContext";
+import CursorFollower from "./components/CursorFollower";
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
         <ThemeProvider>
           <AuthProvider>
             <CartProvider>
+              <CursorFollower />
               <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/admin" element={<Admin />} />
