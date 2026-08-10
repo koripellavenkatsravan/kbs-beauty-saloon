@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import axios from "axios";
 import { AnimatePresence, motion } from "framer-motion";
-import { X, ChevronLeft, ChevronRight, Trash2, Sparkles, MessageCircle, Check } from "lucide-react";
+import { X, ChevronLeft, ChevronRight, Trash2, Sparkles, MessageCircle, Check, CalendarPlus } from "lucide-react";
 import { toast } from "sonner";
 import { Dialog, DialogContent, DialogTitle, DialogDescription } from "../components/ui/dialog";
 import { Input } from "../components/ui/input";
@@ -9,11 +9,35 @@ import { Textarea } from "../components/ui/textarea";
 import { Label } from "../components/ui/label";
 import { Calendar } from "../components/ui/calendar";
 import { format } from "date-fns";
-import { INDIAN_STATES, buildWhatsAppLink, priceLabel } from "../lib/kbs";
+import { INDIAN_STATES, buildWhatsAppLink, priceLabel, SALON } from "../lib/kbs";
 
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
 
 const STEPS = ["Services", "Stylist", "Date & Time", "Details", "Confirm"];
+
+// Generate iCalendar (.ics) file for adding the appointment to Google/Apple/Outlook calendar
+const buildIcsDataUrl = (b) => {
+  const dt = `${b.date.replace(/-/g, "")}T${b.time.replace(":", "")}00`;
+  const endHr = String(parseInt(b.time.split(":")[0], 10) + 1).padStart(2, "0");
+  const dtEnd = `${b.date.replace(/-/g, "")}T${endHr}${b.time.split(":")[1]}00`;
+  const svc = b.services.map((s) => s.name).join(", ");
+  const lines = [
+    "BEGIN:VCALENDAR",
+    "VERSION:2.0",
+    "PRODID:-//KBS Beauty Saloon//EN",
+    "BEGIN:VEVENT",
+    `UID:${b.id}@kbsbeautysaloon`,
+    `DTSTAMP:${new Date().toISOString().replace(/[-:.]/g, "").slice(0, 15)}Z`,
+    `DTSTART:${dt}`,
+    `DTEND:${dtEnd}`,
+    `SUMMARY:KBS Beauty Saloon — ${svc}`,
+    `DESCRIPTION:Stylist: ${b.stylist}\\nServices: ${svc}\\nTotal: Rs.${b.total}\\nPhone: +91 ${SALON.phoneDisplay}`,
+    `LOCATION:${SALON.address}`,
+    "END:VEVENT",
+    "END:VCALENDAR",
+  ];
+  return `data:text/calendar;charset=utf-8,${encodeURIComponent(lines.join("\r\n"))}`;
+};
 
 const BookingModal = ({ open, onOpenChange, selected, setSelected, allServices }) => {
   const [step, setStep] = useState(0);
@@ -89,7 +113,7 @@ const BookingModal = ({ open, onOpenChange, selected, setSelected, allServices }
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-4xl p-0 border-0 overflow-hidden rounded-3xl bg-transparent shadow-none" data-testid="booking-modal">
+      <DialogContent className="max-w-4xl p-0 border-0 overflow-hidden rounded-3xl bg-transparent shadow-none [&>button.absolute]:hidden" data-testid="booking-modal">
         <DialogTitle className="sr-only">Book Appointment at KBS Beauty Saloon</DialogTitle>
         <DialogDescription className="sr-only">Step-by-step booking: choose services, stylist, date and time, and confirm your appointment.</DialogDescription>
         <div className="kbs-glass-light rounded-3xl overflow-hidden">
@@ -106,12 +130,25 @@ const BookingModal = ({ open, onOpenChange, selected, setSelected, allServices }
               <div className="flex items-center gap-2">
                 {STEPS.map((s, i) => (
                   <div key={s} className="flex-1 flex items-center gap-2">
-                    <div className={`h-1 rounded-full flex-1 ${i <= step ? "bg-[#D4AF37]" : "bg-[#E7DFCF]"}`} />
+                    <motion.div
+                      className={`h-1 rounded-full flex-1 origin-left ${i <= step ? "bg-[#D4AF37]" : "bg-[#E7DFCF] dark:bg-[#2a2a30]"}`}
+                      initial={false}
+                      animate={{ scaleX: i <= step ? 1 : 1 }}
+                      transition={{ duration: 0.3, ease: "easeOut" }}
+                    />
                   </div>
                 ))}
               </div>
               <div className="mt-2 flex justify-between text-[10px] uppercase tracking-[0.2em] text-[#8a6c1e]">
-                {STEPS.map((s, i) => <span key={s} className={i === step ? "text-[#1A1A1A]" : ""}>{s}</span>)}
+                {STEPS.map((s, i) => (
+                  <button
+                    key={s}
+                    onClick={() => { if (i < step) setStep(i); }}
+                    disabled={i > step}
+                    className={`px-1 transition ${i === step ? "text-[#1A1A1A] dark:text-[#FDFBF7] font-semibold" : ""} ${i < step ? "hover:text-[#B7902B] cursor-pointer" : ""} ${i > step ? "cursor-default opacity-60" : ""}`}
+                    data-testid={`stepper-${i}`}
+                  >{s}</button>
+                ))}
               </div>
             </div>
           )}
@@ -120,11 +157,29 @@ const BookingModal = ({ open, onOpenChange, selected, setSelected, allServices }
             <AnimatePresence mode="wait">
               {confirmed ? (
                 <motion.div key="done" initial={{opacity:0, y:8}} animate={{opacity:1, y:0}} className="text-center py-10">
-                  <div className="h-16 w-16 rounded-full bg-[#D4AF37] text-[#1A1A1A] grid place-items-center mx-auto"><Check size={30}/></div>
+                  <motion.div
+                    initial={{ scale: 0, rotate: -180 }}
+                    animate={{ scale: 1, rotate: 0 }}
+                    transition={{ type: "spring", stiffness: 300, damping: 18, delay: 0.1 }}
+                    className="relative h-20 w-20 mx-auto"
+                  >
+                    <div className="absolute inset-0 rounded-full bg-[#D4AF37]/25 animate-ping"/>
+                    <div className="relative h-20 w-20 rounded-full bg-gradient-to-br from-[#E9CE72] to-[#B7902B] text-[#1A1A1A] grid place-items-center shadow-[0_20px_40px_-12px_rgba(212,175,55,0.6)]">
+                      <Check size={38} strokeWidth={3}/>
+                    </div>
+                  </motion.div>
                   <h3 className="font-serif-kbs text-3xl mt-5">Appointment Request Received</h3>
-                  <p className="text-[#3d3d3d] mt-2 text-sm max-w-md mx-auto">
-                    A luxury confirmation has been sent to <b>{confirmed.email}</b>. For an instant reply, send us the summary on WhatsApp.
+                  <p className="text-[#3d3d3d] dark:text-[#c8c8c8] mt-2 text-sm max-w-md mx-auto">
+                    A luxury confirmation has been sent to <b>{confirmed.email}</b>.
                   </p>
+
+                  <div className="mt-5 mx-auto max-w-md rounded-2xl border border-[#E7DFCF] dark:border-[#2a2a30] bg-white/60 dark:bg-[#1A1A1E]/60 backdrop-blur p-4 text-left text-sm">
+                    <div className="flex justify-between"><span className="text-[#8a6c1e]">Name</span><span className="font-medium">{confirmed.full_name}</span></div>
+                    <div className="flex justify-between mt-1"><span className="text-[#8a6c1e]">Date & Time</span><span className="font-medium">{confirmed.date} · {confirmed.time}</span></div>
+                    <div className="flex justify-between mt-1"><span className="text-[#8a6c1e]">Stylist</span><span className="font-medium">{confirmed.stylist}</span></div>
+                    <div className="flex justify-between mt-1"><span className="text-[#8a6c1e]">Total</span><span className="font-serif-kbs text-lg text-[#B7902B]">₹{(confirmed.total || 0).toLocaleString()}</span></div>
+                  </div>
+
                   <div className="mt-6 flex flex-wrap gap-3 justify-center">
                     <a
                       href={buildWhatsAppLink(confirmed)}
@@ -133,6 +188,14 @@ const BookingModal = ({ open, onOpenChange, selected, setSelected, allServices }
                       data-testid="confirm-whatsapp-btn"
                     >
                       <MessageCircle size={16}/> Send on WhatsApp
+                    </a>
+                    <a
+                      href={buildIcsDataUrl(confirmed)}
+                      download={`KBS-Appointment-${confirmed.date}.ics`}
+                      className="btn-outline-gold px-6 py-3 rounded-full text-sm inline-flex items-center gap-2"
+                      data-testid="add-to-calendar-btn"
+                    >
+                      <CalendarPlus size={16}/> Add to Calendar
                     </a>
                     <button onClick={close} className="btn-outline-gold px-6 py-3 rounded-full text-sm" data-testid="confirm-close-btn">Done</button>
                   </div>

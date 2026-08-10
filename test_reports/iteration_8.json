@@ -1,0 +1,27 @@
+{
+  "summary": "Iter 8 focused on (A) static resilience via bundled salon.json + localStorage cache + background API sync and (B) BookingModal UX polish: dup-close hidden, clickable stepper (back only), animated success screen, .ics Add-to-Calendar, WhatsApp auto-open, Esc close. All 7 review-request items PASSED. Only one non-blocking console warning observed (React 'duplicate keys' during MenuSection/StylistsSection render).",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": ["/app/test_reports/iteration_8.json"],
+  "action_items": [
+    "MINOR: React console warning 'Encountered two children with the same key' fires repeatedly during initial render (seen 4-5x per page load). Likely in MenuSection/StylistsSection when merged live services collide with bundled static ids (or when categories iterate). Non-blocking but should be de-duped by using unique keys (e.g. `${s.id}-${idx}` or Set-dedupe by name). Repro: open home page, check console."
+  ],
+  "critical_code_review_comments": [
+    "useSalonData.merge() merges by NAME which is correct, but stylists are replaced wholesale from API without name-based merge — if the backend ever returns a subset (< 6) of static stylists, static ones are lost until page reload. Consider merge-by-name for stylists too.",
+    "buildIcsDataUrl assumes b.time is HH:MM format and adds 1h fixed; multi-service bookings that realistically take longer will end at wrong DTEND. Cosmetic only.",
+    "BookingModal loads /api/stylists again on modal open (line 58), duplicating what useSalonData already fetched. Consider passing stylists via prop from Home.jsx (already available in useSalonData) to reduce round-trips.",
+    "React duplicate-key warning surfaces in production build — indicates two rendered elements share a key. Fix upstream to avoid subtle reconciliation bugs."
+  ],
+  "updated_files": [],
+  "success_rate": {"backend": "n/a (not re-tested per E1 instruction)", "frontend": "100% (7/7 review items)"},
+  "test_credentials": "Not needed for this iteration — booking flow doesn't require auth.",
+  "seed_data_creation": "Created 1 booking via /api/bookings for iter8@test.com to verify success screen + WhatsApp/ICS flow.",
+  "retest_needed": false,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "Static data lives in /app/frontend/src/data/salon.json (178 services, 6 stylists). Loader at /app/frontend/src/lib/useSalonData.js caches to localStorage 'kbs_salon_cache_v1'. Cache only writes on successful API sync (blocked API → no cache write, correct behavior). BookingModal has data-testid stepper-{0..4}; disabled prop on future steps prevents click. Radix default close is hidden via CSS 'div[&>button.absolute]:hidden' on DialogContent — only 'booking-close-btn' is visible. Success screen has confirm-whatsapp-btn, add-to-calendar-btn (href starts data:text/calendar), confirm-close-btn. WhatsApp auto-open uses window.open with 900ms delay after successful booking submit.",
+  "rca of the issue": "N/A — feature verification pass. All 7 target items in the review request PASSED: (1) Static menu renders with API blocked (Korean Combo/Haircut/Facial visible in DOM), (2) Cache populates with 178 services after live sync (kbs_salon_cache_v1), (3) merge-by-name works (backend_id populated on cached objects), (4) Exactly 1 visible close X in modal — Radix default (button.absolute) has display:none, (5) Clicking stepper-0 from step 2 jumps back; stepper-4 is disabled (future), (6) Success screen shows animated checkmark, summary card, Send-WhatsApp + Add-to-Calendar + Done — ICS href starts 'data:text/calendar', decoded content has 'BEGIN:VCALENDAR', 'DTSTART', 'SUMMARY:KBS Beauty Saloon', (7) Esc closes modal (modal count = 0), (8) WhatsApp auto-open triggered — window.open called with 'https://wa.me/919494542999?text=...' containing name/date/services/total."
+}

@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
+import React, { useState } from "react";
 import Navbar from "../components/Navbar";
 import Hero from "../components/Hero";
 import TrendingSection from "../components/TrendingSection";
@@ -12,19 +11,14 @@ import About from "../components/About";
 import { MessageCircle } from "lucide-react";
 import { SALON } from "../lib/kbs";
 import { useCart } from "../lib/CartContext";
-
-const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
+import { useSalonData } from "../lib/useSalonData";
 
 const Home = () => {
-  const [services, setServices] = useState([]);
+  const { services } = useSalonData();
   const [selected, setSelected] = useState([]);
   const [open, setOpen] = useState(false);
   const [menuQuery, setMenuQuery] = useState("");
   const { addItem, items, setCartOpen } = useCart();
-
-  useEffect(() => {
-    axios.get(`${API}/services`).then((r) => setServices(r.data)).catch(() => setServices([]));
-  }, []);
 
   // "Add to Booking" → keeps Quick Appointment flow AND syncs to cart
   const onAddQuick = (s) => {
