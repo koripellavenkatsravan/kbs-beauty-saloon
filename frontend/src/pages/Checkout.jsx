@@ -13,10 +13,10 @@ import { useMagnetic } from "../lib/useMagnetic";
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
 
 const PAY_APPS = [
-  { name: "PhonePe", scheme: "phonepe", bg: "#5F259F", logo: "https://customer-assets-v7afamib.emergentagent.net/job_elegant-salon-app/artifacts/kdpvhv0e_id6JUGRMqk_1786344665164.jpeg" },
-  { name: "Google Pay", scheme: "tez", bg: "#FFFFFF", logo: "https://customer-assets-v7afamib.emergentagent.net/job_elegant-salon-app/artifacts/hhzvvrkz_id65s7FpXt_1786344697897.jpeg" },
-  { name: "Paytm", scheme: "paytmmp", bg: "#FFFFFF", logo: "https://customer-assets-v7afamib.emergentagent.net/job_elegant-salon-app/artifacts/79h6atdy_%7BC75FE253-6823-44F8-8401-C1AB32EEA815%7D.png" },
-  { name: "BHIM / CRED", scheme: "upi", bg: "#0F0F11", logo: "https://customer-assets-v7afamib.emergentagent.net/job_elegant-salon-app/artifacts/bz0jen02_idIvolSN8d_1786344734954.jpeg" },
+  { name: "PhonePe", scheme: "phonepe", bg: "#5F259F", logo: "https://customer-assets-v7afamib.emergentagent.net/job_elegant-salon-app/artifacts/bz0jen02_idIvolSN8d_1786344734954.jpeg" },
+  { name: "Google Pay", scheme: "tez", bg: "#FFFFFF", logo: "https://customer-assets-v7afamib.emergentagent.net/job_elegant-salon-app/artifacts/0ftdy0rz_Icon.jpeg" },
+  { name: "Paytm", scheme: "paytmmp", bg: "#FFFFFF", logo: "https://customer-assets-v7afamib.emergentagent.net/job_elegant-salon-app/artifacts/kdpvhv0e_id6JUGRMqk_1786344665164.jpeg" },
+  { name: "CRED", scheme: "upi", bg: "#0F0F11", logo: "https://customer-assets-v7afamib.emergentagent.net/job_elegant-salon-app/artifacts/hhzvvrkz_id65s7FpXt_1786344697897.jpeg" },
 ];
 
 const buildUpiLink = (scheme, upiId, name, amount, note) => {
