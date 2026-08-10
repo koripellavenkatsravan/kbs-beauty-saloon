@@ -13,10 +13,10 @@ import { useMagnetic } from "../lib/useMagnetic";
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
 
 const PAY_APPS = [
-  { name: "PhonePe", scheme: "phonepe", color: "#5F259F", letter: "P" },
-  { name: "Google Pay", scheme: "tez", color: "#1A73E8", letter: "G" },
-  { name: "Paytm", scheme: "paytmmp", color: "#00BAF2", letter: "Pt" },
-  { name: "BHIM / CRED", scheme: "upi", color: "#1A1A1A", letter: "U" },
+  { name: "PhonePe", scheme: "phonepe", bg: "#5F259F", logo: "https://customer-assets-v7afamib.emergentagent.net/job_elegant-salon-app/artifacts/kdpvhv0e_id6JUGRMqk_1786344665164.jpeg" },
+  { name: "Google Pay", scheme: "tez", bg: "#FFFFFF", logo: "https://customer-assets-v7afamib.emergentagent.net/job_elegant-salon-app/artifacts/hhzvvrkz_id65s7FpXt_1786344697897.jpeg" },
+  { name: "Paytm", scheme: "paytmmp", bg: "#FFFFFF", logo: "https://customer-assets-v7afamib.emergentagent.net/job_elegant-salon-app/artifacts/79h6atdy_%7BC75FE253-6823-44F8-8401-C1AB32EEA815%7D.png" },
+  { name: "BHIM / CRED", scheme: "upi", bg: "#0F0F11", logo: "https://customer-assets-v7afamib.emergentagent.net/job_elegant-salon-app/artifacts/bz0jen02_idIvolSN8d_1786344734954.jpeg" },
 ];
 
 const buildUpiLink = (scheme, upiId, name, amount, note) => {
@@ -159,7 +159,9 @@ const Checkout = () => {
                         className="flex flex-col items-center gap-2 px-3 py-4 rounded-2xl bg-white dark:bg-[#1A1A1E] border border-[#E7DFCF] dark:border-[#2a2a30] hover:border-[#D4AF37] hover:shadow-[0_10px_24px_-10px_rgba(212,175,55,0.6)] transition-all active:scale-95 hover:scale-[1.03]"
                         data-testid={`pay-app-${a.scheme}`}
                       >
-                        <div className="h-9 w-9 rounded-full grid place-items-center text-[13px] font-bold text-white" style={{ background: a.color }}>{a.letter}</div>
+                        <div className="h-12 w-12 rounded-2xl overflow-hidden grid place-items-center shadow-sm" style={{ background: a.bg }}>
+                          <img src={a.logo} alt={a.name} className="h-full w-full object-cover" loading="lazy"/>
+                        </div>
                         <span className="text-[11px] font-medium text-[#1A1A1A] dark:text-[#FDFBF7]">{a.name}</span>
                       </a>
                     );

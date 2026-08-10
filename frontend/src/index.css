@@ -371,3 +371,38 @@ html, body, .kbs-card, .kbs-glass-light, .kbs-dark-panel, .btn-onyx, .btn-outlin
 }
 /* Checkout hero heading contrast */
 [data-theme="dark"] h1.font-serif-kbs { color: #FDFBF7 !important; }
+
+/* ============================================================
+   DARK MODE — MENU + BROADER TEXT SWEEP
+   Force ALL menu section text (accordion items, service names,
+   subcategory titles) to be readable in dark mode.
+   ============================================================ */
+
+/* Any font-serif-kbs (branded headings) inside menu / bridal / cart go white */
+[data-theme="dark"] #menu .font-serif-kbs,
+[data-theme="dark"] #bridal .font-serif-kbs,
+[data-theme="dark"] #reviews .font-serif-kbs,
+[data-theme="dark"] #stylists .font-serif-kbs,
+[data-theme="dark"] #trending .font-serif-kbs,
+[data-theme="dark"] [role="dialog"] .font-serif-kbs {
+  color: #FDFBF7 !important;
+}
+
+/* Explicit exceptions — keep gold accents gold */
+[data-theme="dark"] .text-\[\#B7902B\],
+[data-theme="dark"] .text-\[\#D4AF37\],
+[data-theme="dark"] .text-\[\#8a6c1e\],
+[data-theme="dark"] .text-\[\#E9CE72\] {
+  color: #E9CE72 !important;
+}
+[data-theme="dark"] .text-\[\#B7902B\] { color: #E9CE72 !important; }
+
+/* Rose/pink accent stays rose */
+[data-theme="dark"] .text-\[\#7a4757\] { color: #E5C1CD !important; }
+
+/* Menu accordion body text and descriptions */
+[data-theme="dark"] #menu .text-\[\#6b6b6b\],
+[data-theme="dark"] #bridal .text-\[\#6b6b6b\] { color: #b8b8b8 !important; }
+
+/* Category card banners (dark gradient overlay – already white, but ensure) */
+[data-theme="dark"] [data-testid^="cat-card-"] .text-white { color: #FFFFFF !important; }

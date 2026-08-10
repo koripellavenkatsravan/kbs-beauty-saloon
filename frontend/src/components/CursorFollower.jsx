@@ -56,8 +56,8 @@ const CursorFollower = () => {
         aria-hidden
         className={`fixed top-0 left-0 pointer-events-none z-[9998] rounded-full border transition-[width,height,border-color,background] duration-300 ease-out ${
           hover
-            ? "w-14 h-14 border-[#D4AF37]/70 bg-[#D4AF37]/10 -ml-7 -mt-7"
-            : "w-8 h-8 border-[#D4AF37]/50 -ml-4 -mt-4"
+            ? "w-8 h-8 border-[#D4AF37]/70 bg-[#D4AF37]/10 -ml-4 -mt-4"
+            : "w-5 h-5 border-[#D4AF37]/45 -ml-2.5 -mt-2.5"
         }`}
       />
     </>
