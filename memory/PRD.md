@@ -19,3 +19,16 @@ Apple-grade luxury digital menu + booking + e-commerce cart web app for KBS Beau
 - P1: Real-time booking notifications for manager
 - P2: Razorpay/Stripe on top of UPI (optional)
 - P2: Bilingual (Telugu + English)
+
+## Iteration 8-9 (2026-07-31) — Static Resilience + Booking Modal Polish
+- **Static-content bundling**: /app/frontend/src/data/salon.json (178 services + 6 stylists) is now shipped with the frontend. `useSalonData` hook: bundled JSON = instant paint, localStorage cache = repeat-visit paint, live /api/services sync in background merges manager edits. **The menu never goes blank** even if backend is asleep/slow.
+- **Booking Modal fixes** (Section 6):
+  - Removed duplicate close (Radix DialogPrimitive.Close hidden via className `[&>button.absolute]:hidden`)
+  - Progress stepper now clickable to jump BACK to any completed step (future steps disabled)
+  - Success screen redesigned: spring-animated gold checkmark with ping-ring, summary card, and NEW **Add to Calendar** button that downloads a proper `.ics` file with the appointment
+  - Esc-to-close works natively via Radix
+
+## Remaining Phases (per user PRD)
+- Phase 2: Razorpay + polished UPI cart page (needs Razorpay API keys from user)
+- Phase 3: Dark-mode audit across every modal/page/admin
+- Phase 4: Micro-interactions (magnetic buttons, tilt cards, cursor follower, scroll reveals, logo hover)
