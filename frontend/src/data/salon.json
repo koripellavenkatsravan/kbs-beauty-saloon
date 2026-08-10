@@ -67,7 +67,7 @@
       "available": true
     },
     {
-      "id": "hair-style-shampoo",
+      "id": "hair-style-plus-shampoo",
       "name": "Hair Style + Shampoo",
       "price": 150,
       "priceMax": null,
@@ -958,7 +958,7 @@
       "available": true
     },
     {
-      "id": "o3-pedicure",
+      "id": "o3-plus-pedicure",
       "name": "O3+ Pedicure",
       "price": 1200,
       "priceMax": null,
